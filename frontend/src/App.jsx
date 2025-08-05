@@ -1,14 +1,15 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import { MyReactNativeForm } from './assets/components/Login.jsx';
-import { MainPage } from './assets/components/MainPage.jsx';
-import PageNotFound from './assets/components/PageNotFound.jsx';
+import LoginForm from './components/LoginForm.jsx';
+import MainPage from './components/MainPage.jsx';
+import PageNotFound from './components/PageNotFound.jsx';
+import './App.css';
 
 function App() {
   return (
     <BrowserRouter>
       <Routes>
-        <Route path='/' element={<MainPage />} />
-        <Route path='login' element={<MyReactNativeForm />} />
+        <Route index element={<MainPage />} />
+        <Route path='login' element={<LoginForm />} />
         <Route path='*' element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
