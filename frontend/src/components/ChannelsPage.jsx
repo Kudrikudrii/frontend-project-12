@@ -1,39 +1,49 @@
 import { useEffect, useState } from 'react';
-import { useSelector, useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { fetchChannels } from '../slices/chatSlice.js';
+import { setChannels } from '../slices/chatSlice.js';
+// import routes from '../routes.js';
+import getAuthToken from '../getAuthToken.js';
+import axios from 'axios';
 
-const ChatPage = () => {
+const ChannelsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
-  const { channels, status, error } = useSelector((state) => state.channels);
-  const [currentChannel, setCurrentChannel] = useState(null);
-
-  const activeChannelData = channels.find((channel) => channel.id === currentChannel);
 
   useEffect(() => {
+    const fetchContent = async () => {
+      try {
+        const response = await axios.get('/api/v1/channels', {
+          headers: getAuthToken(),
+        });
+        const channels = response.data;
+        console.log(channels);
+        dispatch(setChannels(channels));
+        setCurrentChannel(channels[0].id);
+      } catch (err) {
+        console.error('Ошибка при загрузке каналов:', err);
+        if (err.response?.status === 401) {
+          localStorage.removeItem('token');
+          navigate('/login');
+        }
+      }
+    };
+
+    fetchContent();
     const token = localStorage.getItem('token');
     if (!token) {
       navigate('/login');
     }
-    if (token) {
-      dispatch(fetchChannels(token));
-    }
   }, [dispatch, navigate]);
-
-  useEffect(() => {
-    if (channels.length > 0 && !currentChannel) {
-      setCurrentChannel(channels[0].id);
-    }
-  }, [channels, currentChannel]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
     navigate('/login');
   };
-
-  if (status === 'loading') return <div className='d-flex justify-content-center mt-5'>Загрузка каналов...</div>;
-  if (status === 'failed') return <div className='alert alert-danger'>Ошибка: {error}</div>;
+  const channels = useSelector((state) => state.channels.channels);
+  console.log(channels);
+  const [currentChannel, setCurrentChannel] = useState('');
+  const activeChannelData = channels.find((channel) => channel.id === currentChannel);
 
   return (
     <div className='h-100 bg-light'>
@@ -71,7 +81,6 @@ const ChatPage = () => {
                         <button type='button' className={`w-100 rounded-0 text-start btn ${currentChannel === channel.id ? 'btn-secondary' : ''}`} onClick={() => setCurrentChannel(channel.id)}>
                           <span className='me-1'>#</span>
                           {channel.name}
-                          {!channel.removable && <span className='visually-hidden'> (нельзя удалить)</span>}
                         </button>
                       </li>
                     ))}
@@ -119,4 +128,4 @@ const ChatPage = () => {
   );
 };
 
-export default ChatPage;
+export default ChannelsPage;
