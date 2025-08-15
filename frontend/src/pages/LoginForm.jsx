@@ -44,8 +44,8 @@ const LoginPage = () => {
         }
       } catch (err) {
         ("Ошибка:", {
-          status: err.response?.status, // 500
-          data: err.response?.data,     // { message: "Internal Server Error" }
+          status: err.response?.status, 
+          data: err.response?.data, 
           headers: err.response?.headers,
         });
         if (err.isAxiosError && err.response.status === 401) {

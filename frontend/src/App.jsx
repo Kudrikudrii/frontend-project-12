@@ -1,9 +1,8 @@
 import { BrowserRouter, Routes, Route } from 'react-router-dom';
-import LoginForm from './components/LoginForm.jsx';
-// import MainPage from './components/MainPage.jsx';
-import PageNotFound from './components/PageNotFound.jsx';
-import ChannelsPage from './components/ChannelsPage.jsx';
-import RequireAuth from './components/RequireAuth.jsx';
+import LoginForm from './pages/LoginForm.jsx';
+import PageNotFound from './pages/PageNotFound.jsx';
+import ChannelsPage from './pages/ChannelsPage.jsx';
+import RequireAuth from './pages/RequireAuth.jsx';
 import './App.css';
 
 function App() {
