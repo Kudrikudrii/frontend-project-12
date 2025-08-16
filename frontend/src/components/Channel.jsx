@@ -4,7 +4,7 @@ const Channel = ({ channel, handleClick, currentChannelId }) => {
   return (
     <li className='nav-item w-100'>
       <Button
-        variant={currentChannelId === channel.id ? 'btn-secondary' : ''}
+        variant={currentChannelId === channel.id ? 'secondary' : 'light'}
         className='w-100 rounded-0 text-start btn'
         onClick={() => handleClick(channel.id)}
       >
