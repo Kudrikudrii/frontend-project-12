@@ -1,10 +1,10 @@
-const ActiveChannel = ({ activeChannelData, channelMessages }) => {
+const ActiveChannel = ({ channelName, messagesCount }) => {
     return (
       <div className='bg-light mb-4 p-3 shadow-sm small'>
         <p className='m-0'>
-          <b># {activeChannelData.name}</b>
+          <b># {channelName}</b>
         </p>
-        <span className='text-muted'>{`${channelMessages.length} сообщений`}</span>
+        <span className='text-muted'>{`${messagesCount} сообщений`}</span>
       </div>
     )
 };
