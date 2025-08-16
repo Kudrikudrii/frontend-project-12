@@ -1,11 +1,11 @@
 import { createSlice } from '@reduxjs/toolkit';
 
 const initialState = {
-  channels: [],
+  channels: [], // { id: '1', name: 'general', removable: false}
 };
 
 const slice = createSlice({
-  name: 'channels',
+  name: 'channels', 
   initialState,
   reducers: {
     setChannels: (state, { payload }) => {
