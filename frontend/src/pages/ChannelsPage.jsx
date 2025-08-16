@@ -20,16 +20,18 @@ const ChannelsPage = () => {
         const responseChannels = await axios.get(routes.channelsPath(), {
           headers: getAuthToken(),
         });
-        const channels = responseChannels.data;
-        console.log('API Response:', responseChannels.data);
+        const channels = responseChannels?.data;
+        // console.log('API Response:', responseChannels?.data);
         dispatch(setChannels(channels));
-        setCurrentChannelId(channels[0].id);
+        if (!currentChannelId && channels.length > 0) {
+          setCurrentChannelId(channels[0].id);
+        }
 
         const responseMessages = await axios.get(routes.messagesPath(), {
           headers: getAuthToken(),
         });
-        const messages = responseMessages.data;
-        console.log('API Response (messages):', responseMessages.data);
+        const messages = responseMessages?.data;
+        // console.log('API Response (messages):', responseMessages?.data);
         dispatch(setMessages(messages));
       } catch (err) {
         console.error('Ошибка при загрузке каналов:', err);
@@ -45,7 +47,7 @@ const ChannelsPage = () => {
     if (!token) {
       navigate('/login');
     }
-  }, [dispatch, navigate]);
+  }, [dispatch, navigate, currentChannelId]);
 
   const handleLogout = () => {
     localStorage.removeItem('token');
@@ -70,7 +72,7 @@ const ChannelsPage = () => {
             <div className='container h-100 my-4 overflow-hidden rounded shadow'>
               <div className='row h-100 bg-white flex-md-row'>
                 <Channels currentChannelId={currentChannelId}  handleClick={setCurrentChannelId} />
-                <Messages currentChannel={currentChannelId} />
+                <Messages currentChannelId={currentChannelId} />
               </div>
             </div>
             <div className='Toastify'></div>
