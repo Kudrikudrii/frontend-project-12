@@ -1,6 +1,7 @@
 const Message = ({ message }) => {
+  console.log('Message data:', message);
   return (
-    <div class="text-break mb-2"><b>admin</b>: re
+    <div className="text-break mb-2">
       <b>{message.username}</b>: {message.body}
     </div>
   )
