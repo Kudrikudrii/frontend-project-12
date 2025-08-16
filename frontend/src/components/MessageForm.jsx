@@ -1,13 +1,10 @@
 import { useFormik } from 'formik';
 import getAuthToken from '../getAuthToken';
 import axios from 'axios';
-import { useDispatch } from 'react-redux';
 import { useRef, useEffect } from 'react';
-import { addMessage } from '../slices/messagesSlice';
 import routes from '../routes';
 
 const MessageForm = ({ currentChannelId, username }) => {
-  const dispatcher = useDispatch();
   const inputRef = useRef();
   useEffect(() => {
     inputRef.current.focus();
@@ -20,15 +17,18 @@ const MessageForm = ({ currentChannelId, username }) => {
     onSubmit: async (values) => {
       const newMessage = {
         body: values.body,
-        currentChannelId,
+        channelId: currentChannelId,
         username,
       }
-      const response = axios.post(routes.messagesPath(), newMessage, {
-        headers: getAuthToken()
-      });
-      dispatcher(addMessage(response.data));
-      formik.resetForm();
-      inputRef.current.focus();
+      try {
+        await axios.post(routes.messagesPath(), newMessage, {
+          headers: getAuthToken()
+        });
+        formik.resetForm();
+        inputRef.current.focus();
+      } catch (error) {
+        console.error('Error sending message:', error);
+      }
     },
   });
 
@@ -44,6 +44,7 @@ const MessageForm = ({ currentChannelId, username }) => {
           className='border-0 p-0 ps-2 form-control'
           onChange={formik.handleChange}
           value={formik.values.body}
+          ref={inputRef}
         />
         <button 
           type='submit' 
