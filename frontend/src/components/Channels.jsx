@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import Channel from './Channel';
 
-const Channels = ({ currentChannel, handleClick }) =>  {
+const Channels = ({ currentChannelId, handleClick }) =>  {
     const channels = useSelector((state) => state.channels.channels)
     return (
     <div className='col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex'>
@@ -21,7 +21,7 @@ const Channels = ({ currentChannel, handleClick }) =>  {
         <Channel
             key={channel.id}
             channel={channel}
-            currentChannel={currentChannel}
+            currentChannelId={currentChannelId}
             handleClick={handleClick}
             />
         ))}

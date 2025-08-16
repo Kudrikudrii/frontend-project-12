@@ -1,14 +1,34 @@
 import { useFormik } from 'formik';
+import getAuthToken from '../getAuthToken';
+import axios from 'axios';
+import { useDispatch } from 'react-redux';
+import { useRef, useEffect } from 'react';
+import { addMessage } from '../slices/messagesSlice';
+import routes from '../routes';
 
-const MessageForm = ({ currentChannel, username }) => {
+const MessageForm = ({ currentChannelId, username }) => {
+  const dispatcher = useDispatch();
+  const inputRef = useRef();
+  useEffect(() => {
+    inputRef.current.focus();
+  }, []);
+
   const formik = useFormik({
     initialValues: {
       body: '',
     },
-    onSubmit: (values) => {
-      // Обработка отправки формы
-      console.log('Отправлено:', values);
-      // Здесь можно добавить логику отправки сообщения
+    onSubmit: async (values) => {
+      const newMessage = {
+        body: values.body,
+        currentChannelId,
+        username,
+      }
+      const response = axios.post(routes.messagesPath(), newMessage, {
+        headers: getAuthToken()
+      });
+      dispatcher(addMessage(response.data));
+      formik.resetForm();
+      inputRef.current.focus();
     },
   });
 

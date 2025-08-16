@@ -5,15 +5,18 @@ const initialState = {
 };
 
 const slice = createSlice({
-  name: '',
+  name: 'messages',
   initialState,
   reducers: {
     setMessages: (state, { payload }) => {
-      state.messages.push(payload);
+      state.messages = payload;
+    },
+    addMessage: (state, { payload }) => {
+      state.messages = [...state.messages, payload]
     },
   },
 });
 
-export const { setMessages } = slice.actions;
+export const { setMessages, addMessage } = slice.actions;
 
 export default slice.reducer;

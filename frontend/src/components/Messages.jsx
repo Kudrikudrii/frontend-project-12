@@ -1,7 +1,7 @@
 import { useSelector } from 'react-redux';
 import Message from './Message';
 import MessageForm from './MessageForm';
-import ActiveChannel from './ActiveChannel';
+import ActiveChannel from './ActiveChannel.jsx';
 
 const Messages = ({ currentChannelId }) =>  {
     const messages = useSelector((state) => state.messages.messages)
