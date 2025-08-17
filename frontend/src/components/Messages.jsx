@@ -14,13 +14,7 @@ const Messages = ({ currentChannelId }) =>  {
   
   useEffect(() => {
     const handleNewMessage = (message) => {
-      if (message.channelId === currentChannelId) {
-        const fullMessage = {
-        ...message,
-        username: message.username || username, // username из useSelector
-      };
-        dispatch(addMessage(fullMessage));
-      }
+      dispatch(addMessage(message));
     };
 
     socket.on('newMessage', handleNewMessage);
@@ -28,7 +22,7 @@ const Messages = ({ currentChannelId }) =>  {
     return () => {
       socket.off('newMessage', handleNewMessage);
     };
-  }, [currentChannelId, dispatch]);
+  }, [dispatch]);
   
   const channelMessages = messages.filter((message) => message.channelId === currentChannelId)
   console.log(messages)
