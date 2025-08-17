@@ -32,7 +32,7 @@ const LoginPage = () => {
           const { username, token } = response.data;
           dispatcher(
             setCredentials({
-              user: username,
+              username,
               token,
             })
           );
