@@ -1,7 +1,7 @@
 import { useEffect, useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
-import { setChannels } from '../slices/chatSlice.js';
+import { setChannels } from '../slices/channelsSlice.js';
 import routes from '../routes.js';
 import getAuthToken from '../getAuthToken.js';
 import axios from 'axios';
@@ -13,7 +13,10 @@ const ChannelsPage = () => {
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentChannelId, setCurrentChannelId] = useState('');
-
+  const defaultChannelId = useSelector(state => 
+    state.channels.channels.find(c => c.name === 'general')?.id || '1'
+  );  
+  
   useEffect(() => {
     const fetchContent = async () => {
       try {
@@ -71,7 +74,11 @@ const ChannelsPage = () => {
             </nav>
             <div className='container h-100 my-4 overflow-hidden rounded shadow'>
               <div className='row h-100 bg-white flex-md-row'>
-                <Channels currentChannelId={currentChannelId}  handleClick={setCurrentChannelId} />
+                <Channels
+                  currentChannelId={currentChannelId}
+                  handleClick={setCurrentChannelId} 
+                  defaultChannelId={defaultChannelId}
+                />
                 <Messages currentChannelId={currentChannelId} />
               </div>
             </div>
