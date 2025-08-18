@@ -3,6 +3,7 @@ import LoginForm from './pages/LoginForm.jsx';
 import PageNotFound from './pages/PageNotFound.jsx';
 import ChannelsPage from './pages/ChannelsPage.jsx';
 import RequireAuth from './pages/RequireAuth.jsx';
+import SignUpPage from './pages/SignUpForm.jsx';
 import './App.css';
 
 function App() {
@@ -18,6 +19,7 @@ function App() {
           }
         />
         <Route path='login' element={<LoginForm />} />
+        <Route path='signup' element={<SignUpPage />} />
         <Route path='*' element={<PageNotFound />} />
       </Routes>
     </BrowserRouter>
