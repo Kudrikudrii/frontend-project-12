@@ -6,7 +6,7 @@ import axios from 'axios';
 import { Button, Form } from 'react-bootstrap';
 import { setCredentials } from '../slices/authSlice.js';
 import routes from '../routes.js';
-
+import avatar from '../assets/avatar-DIE1AEpS.jpg';
 
 const LoginPage = () => {
   const dispatcher = useDispatch();
@@ -75,7 +75,7 @@ const LoginPage = () => {
                     <div className='card-body row p-5'>
                       <div className='col-12 col-md-6 d-flex align-items-center justify-content-center'>
                         <img 
-                          src="/assets/avatar-DIE1AEpS.jpg"
+                          src={avatar}
                           className="rounded-circle" 
                           alt="Войти"
                         />

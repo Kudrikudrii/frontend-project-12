@@ -1,5 +1,5 @@
 import { useState, useRef, useEffect } from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, Link } from 'react-router-dom';
 import { useDispatch } from 'react-redux';
 import { useFormik } from 'formik';
 import axios from 'axios';
@@ -7,8 +7,9 @@ import { Button, Form } from 'react-bootstrap';
 import { setCredentials } from '../slices/authSlice.js';
 import routes from '../routes.js';
 import * as Yup from 'yup';
+import avatar from '../assets/avatar_1-D7Cot-zE.jpg';
 
-const SignUpPage = () => {
+const SignUpForm = () => {
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef();
@@ -59,13 +60,7 @@ const SignUpPage = () => {
           localStorage.setItem('token', token);
           localStorage.setItem('username', username);
           navigate('/');
-        } else if (response.status === 409) {
-          setSignupFailed(true);
-          setErrorMessage('Ошибка при регистрации');
-        } else {
-          setSignupFailed(true);
-          setErrorMessage('Такой пользователь уже существует');
-        }
+        } 
       } catch (err) {
         console.error("Ошибка:", {
           status: err.response?.status, 
@@ -73,12 +68,16 @@ const SignUpPage = () => {
           headers: err.response?.headers,
         });
 
-        if (err.isAxiosError) {
-          setSignupFailed(true);
+      if (err.isAxiosError) {
+        setSignupFailed(true);
+        if (err.response?.status === 409) {
+          setErrorMessage('Такой пользователь уже существует');
+        } else {
           setErrorMessage(err.response?.data?.message || 'Ошибка при регистрации');
-          inputRef.current.select();
-          return;
         }
+        inputRef.current.select();
+        return;
+      }
         throw err;
       }
     },
@@ -101,7 +100,7 @@ const SignUpPage = () => {
                     <div className='card-body row p-5'>
                       <div className='col-12 col-md-6 d-flex align-items-center justify-content-center'>
                         <img 
-                          src="/assets/avatar_1-D7Cot-zE.jpg" 
+                          src={avatar}
                           className="rounded-circle img-fluid" 
                           alt="Регистрация" 
                         />
@@ -192,4 +191,4 @@ const SignUpPage = () => {
   );
 };
 
-export default SignUpPage;
+export default SignUpForm;
