@@ -5,8 +5,11 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import getAuthToken from '../../getAuthToken';
 import routes from '../../routes';
 import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
 
 const AddChannelModal = ({ show, onClose }) => {
+  const { t } = useTranslation();
+
   const inputRef = useRef();
 
   useEffect(() => {
@@ -21,9 +24,9 @@ const AddChannelModal = ({ show, onClose }) => {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .required('Название канала обязательно')
-        .min(3, 'Минимум 3 символа')
-        .max(30, 'Максимум 30 символов')
+        .required(t('modal.error.required'))
+        .min(3, t('modal.error.length'))
+        .max(30, t('modal.error.length'))
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
@@ -38,7 +41,7 @@ const AddChannelModal = ({ show, onClose }) => {
       } catch (error) {
         console.error('Ошибка при создании канала:', error);
         if (error.response?.status === 409) {
-          formik.setFieldError('name', 'Канал с таким именем уже существует');
+          formik.setFieldError(t('modal.error.notOneOf'));
         }
       } finally {
         setSubmitting(false);
@@ -49,16 +52,16 @@ const AddChannelModal = ({ show, onClose }) => {
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Добавить канал</Modal.Title>
+        <Modal.Title>{t('modal.addChannel.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit} noValidate>
           <Form.Group controlId="name" className="mb-3">
-            <Form.Label visuallyHidden>Название канала</Form.Label>
+            <Form.Label visuallyHidden>{t('modal.addChannel.label')}</Form.Label>
             <Form.Control
               type="text"
               name="name"
-              placeholder="Введите название канала"
+              placeholder={t('modal.addChannel.placeholder')}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.name}
@@ -77,14 +80,14 @@ const AddChannelModal = ({ show, onClose }) => {
               onClick={onClose} 
               className="me-2"
             >
-              Отменить
+              {t('modal.cancelBtn')}
             </Button>
             <Button 
               variant="primary" 
               type="submit"
               disabled={formik.isSubmitting || !formik.values.name}
             >
-              {formik.isSubmitting ? 'Создание...' : 'Создать'}
+              {t('modal.addChannel.createBtn')}
             </Button>
           </div>
         </Form>

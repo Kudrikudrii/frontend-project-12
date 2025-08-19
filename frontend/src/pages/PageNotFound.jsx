@@ -1,8 +1,11 @@
 import React from 'react';
 import avatar from '../assets/404-D_FLHmTM.svg';
-
+import { Trans, useTranslation } from 'react-i18next';
+import { Link } from 'react-router-dom'; // Используйте Link вместо <a> для SPA
 
 const PageNotFound = () => {
+  const { t } = useTranslation();
+  
   return (
     <body className="h-100 bg-light">
       <div className="h-100">
@@ -10,14 +13,28 @@ const PageNotFound = () => {
           <div className="d-flex flex-column h-100">
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
-                <a className="navbar-brand" href="/">Hexlet Chat</a>
-                <button type="button" className="btn btn-primary">Выйти</button>
+                <a className="navbar-brand" href="/">
+                  {t('mainHeadrer.hexletChat')}
+                </a>
               </div>
             </nav>
             <div className="text-center">
-              <img alt="Страница не найдена" className="img-fluid h-25" src={avatar} />
-              <h1 className="h4 text-muted">Страница не найдена</h1>
-              <p className="text-muted">Но вы можете перейти <a href="/">на главную страницу</a></p>
+              <img 
+                alt={t('notFoundPage.title')} 
+                className="img-fluid w-25" 
+                src={avatar} 
+              />
+              <h1 className="h4 text-muted">
+                {t('notFoundPage.title')}
+              </h1>
+              <p className="text-muted">
+                <Trans 
+                  i18nKey="notFoundPage.toMainPage" 
+                  components={{
+                    homeLink: <Link to="/" className="text-decoration-none" />
+                  }}
+                />
+              </p>
             </div>
           </div>
           <div className="Toastify"></div>
@@ -26,5 +43,6 @@ const PageNotFound = () => {
     </body>  
   );
 };
+
 
 export default PageNotFound;

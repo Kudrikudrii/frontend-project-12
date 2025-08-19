@@ -8,8 +8,10 @@ import axios from 'axios';
 import Channels from '../components/Channels.jsx';
 import Messages from '../components/Messages.jsx';
 import { setMessages } from '../slices/messagesSlice.js';
+import { useTranslation } from 'react-i18next';
 
 const ChannelsPage = () => {
+  const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
   const [currentChannelId, setCurrentChannelId] = useState('');
@@ -24,8 +26,8 @@ const ChannelsPage = () => {
           headers: getAuthToken(),
         });
         const channels = responseChannels?.data;
-        // console.log('API Response:', responseChannels?.data);
         dispatch(setChannels(channels));
+
         if (!currentChannelId && channels.length > 0) {
           setCurrentChannelId(channels[0].id);
         }
@@ -34,8 +36,8 @@ const ChannelsPage = () => {
           headers: getAuthToken(),
         });
         const messages = responseMessages?.data;
-        // console.log('API Response (messages):', responseMessages?.data);
         dispatch(setMessages(messages));
+
       } catch (err) {
         console.error('Ошибка при загрузке каналов:', err);
         if (err.response?.status === 401) {
@@ -65,10 +67,10 @@ const ChannelsPage = () => {
             <nav className='shadow-sm navbar navbar-expand-lg navbar-light bg-white'>
               <div className='container'>
                 <a className='navbar-brand' href='/'>
-                  Hexlet Chat
+                  {t('mainHeadrer.hexletChat')}
                 </a>
                 <button type='button' className='btn btn-primary' onClick={handleLogout}>
-                  Выйти
+                  {t('mainHeadrer.signOut')}
                 </button>
               </div>
             </nav>

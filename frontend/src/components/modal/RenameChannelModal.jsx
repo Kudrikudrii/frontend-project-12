@@ -6,8 +6,11 @@ import routes from '../../routes';
 import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { renameChannel } from '../../slices/channelsSlice';
+import { useTranslation } from 'react-i18next';
+
 
 const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
 
   const formik = useFormik({
@@ -16,9 +19,9 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .required('Название канала обязательно')
-        .min(3, 'Минимум 3 символа')
-        .max(30, 'Максимум 30 символов')
+        .required(t('modal.error.required'))
+        .min(3, t('modal.error.length'))
+        .max(30, t('modal.error.length'))
     }),
     onSubmit: async (values) => {
       try {
@@ -32,7 +35,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
       } catch (error) {
         console.error('Ошибка при переименовании канала:', error);
         if (error.response?.status === 409) {
-          formik.setFieldError('name', 'Канал с таким именем уже существует');
+          formik.setFieldError(t('modal.error.notOneOf'));
         }
       }
     },
@@ -41,7 +44,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Переименовать канал</Modal.Title>
+        <Modal.Title>{t('modal.renameChannel.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
@@ -60,14 +63,14 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
           </Form.Group>
           <div className="d-flex justify-content-end mt-3">
             <Button variant="secondary" onClick={onClose} className="me-2">
-              Отменить
+              {t('modal.cancelBtn')}
             </Button>
             <Button 
               variant="primary" 
               type="submit"
               disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}
             >
-              Отправить
+              {t('modal.confirmBtn')}
             </Button>
           </div>
         </Form>

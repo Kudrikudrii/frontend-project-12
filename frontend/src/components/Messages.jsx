@@ -5,8 +5,10 @@ import MessageForm from './MessageForm';
 import ActiveChannel from './ActiveChannel.jsx';
 import { addMessage } from '../slices/messagesSlice.js';
 import socket from '../socket.js';
+import { useTranslation } from 'react-i18next';
 
 const Messages = ({ currentChannelId }) =>  {
+  const { t } = useTranslation();
   const dispatch = useDispatch();
   const messages = useSelector((state) => state.messages.messages)
   const channels = useSelector((state) => state.channels.channels)
@@ -32,7 +34,7 @@ const Messages = ({ currentChannelId }) =>  {
   if (!activeChannelData) {
     return (
       <div className="col p-0 h-100">
-        <div className="alert alert-warning">Канал не найден</div>
+        <div className="alert alert-warning">{t('chat.noFoundChannel')}</div>
       </div>
     );
   }
@@ -46,7 +48,7 @@ const Messages = ({ currentChannelId }) =>  {
             messagesCount={0}
           />
           <div id="messages-box" className="chat-messages overflow-auto px-5">
-            <div className="text-center text-muted py-4">Нет сообщений в этом канале</div>
+            <div className="text-center text-muted py-4">{t('chat.zeroMessages')}</div>
           </div>
           <div className="mt-auto px-5 py-3">
             <MessageForm currentChannelId={currentChannelId} username={username} />

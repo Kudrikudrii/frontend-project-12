@@ -7,8 +7,10 @@ import { Button, Form } from 'react-bootstrap';
 import { setCredentials } from '../slices/authSlice.js';
 import routes from '../routes.js';
 import avatar from '../assets/avatar-DIE1AEpS.jpg';
+import { useTranslation, Trans } from 'react-i18next';
 
 const LoginPage = () => {
+  const { t } = useTranslation();
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef();
@@ -65,7 +67,10 @@ const LoginPage = () => {
           <div className='d-flex flex-column h-100'>
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
-                <Link className="navbar-brand" to="/">Hexlet Chat</Link>
+                <Link
+                  className="navbar-brand"
+                  to="/">{t('mainHeadrer.hexletChat')}
+                </Link>
               </div>
             </nav>
             <div className='container-fluid h-100'>
@@ -90,7 +95,7 @@ const LoginPage = () => {
                             <Form.Control
                               onChange={formik.handleChange}
                               value={formik.values.username}
-                              placeholder='username'
+                              placeholder={t('loginPage.username')}
                               name='username'
                               id='username'
                               autoComplete='username'
@@ -98,23 +103,23 @@ const LoginPage = () => {
                               required
                               ref={inputRef}
                             />
-                            <Form.Label htmlFor='username'>Ваш ник</Form.Label>
+                            <Form.Label htmlFor='username'>{t('loginPage.username')}</Form.Label>
                           </Form.Group>
                           <Form.Group className='form-floating mb-4'>
                             <Form.Control
                               type='password'
                               onChange={formik.handleChange}
                               value={formik.values.password}
-                              placeholder='password'
+                              placeholder={t('loginPage.password')}
                               name='password'
                               id='password'
                               autoComplete='current-password'
                               isInvalid={authFailed}
                               required
                             />
-                            <Form.Label htmlFor='password'>Пароль</Form.Label>
+                            <Form.Label htmlFor='password'>{t('loginPage.password')}</Form.Label>
                             <Form.Control.Feedback type='invalid'>
-                              Неверные имя пользователя или пароль
+                              {t('loginPage.invalidPassword')}
                             </Form.Control.Feedback>
                           </Form.Group>
                           <Button
@@ -122,17 +127,16 @@ const LoginPage = () => {
                             type='submit'
                             variant='outline-primary'
                           >
-                            Войти
+                            {t('loginPage.submit')}
                           </Button>
                         </fieldset>
                       </Form>
                     </div>
                     <div className='card-footer p-4 d-flex align-items-center justify-content-center'>
                       <div className="text-center">
-                        <span>Нет аккаунта?</span>{' '}
-                        <Link to="/signup" className="text-decoration-none">
-                          Регистрация
-                        </Link>
+                        <Trans i18nKey="loginPage.noSignUpWithLink">
+                          Нет аккаунта? <Link to="/signup" className="text-decoration-none">Регистрация</Link>
+                        </Trans>
                       </div>
                     </div>
                   </div>

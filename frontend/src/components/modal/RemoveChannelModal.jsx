@@ -2,16 +2,18 @@ import { Modal, Button } from 'react-bootstrap';
 import axios from 'axios';
 import getAuthToken from '../../getAuthToken';
 import routes from '../../routes';
+import { useTranslation } from 'react-i18next';
 
 const RemoveChannelModal = ({
   show,
   onClose,
   channelId,
-  channelName,
   defaultChannelId,
   currentChannelId,
   handleSwitchChannel
 }) => {
+  const { t } = useTranslation();
+
   const handleRemove = async () => {
     try {
       await axios.delete(routes.channelsPath(channelId), {
@@ -31,16 +33,16 @@ const RemoveChannelModal = ({
   return (
     <Modal show={show} onHide={onClose} centered>
       <Modal.Header closeButton>
-        <Modal.Title>Удалить канал</Modal.Title>
+        <Modal.Title>{t('modal.removeChannel.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <p className="lead">Уверены, что хотите удалить канал {channelName}?</p>
+        <p className="lead">{t('modal.removeChannel.body')}</p>
         <div className="d-flex justify-content-end">
           <Button variant="secondary" onClick={onClose} className="me-2">
-            Отменить
+            {t('modal.cancelBtn')}
           </Button>
           <Button variant="danger" onClick={handleRemove}>
-            Удалить
+            {t('modal.removeChannel.deleteBtn')}
           </Button>
         </div>
       </Modal.Body>

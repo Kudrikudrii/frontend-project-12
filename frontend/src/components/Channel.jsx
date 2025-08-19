@@ -3,12 +3,14 @@ import { useState } from 'react';
 import { Dropdown } from 'react-bootstrap';
 import RemoveChannelModal from './modal/RemoveChannelModal';
 import RenameChannelModal from './modal/RenameChannelModal';
+import { useTranslation } from 'react-i18next';
 
 const Channel = ({ channel, handleClick, currentChannelId, defaultChannelId }) => {
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const isActive = channel.id === currentChannelId;
   const isRemovable = channel.removable ? true : false;
+  const { t } = useTranslation();
 
   return (
     <li className='nav-item w-100'>
@@ -29,15 +31,15 @@ const Channel = ({ channel, handleClick, currentChannelId, defaultChannelId }) =
                 variant={isActive ? 'primary' : ''}
                 className="flex-grow-0 rounded-0 dropdown-toggle dropdown-toggle-split btn"
               >
-                <span className="visually-hidden">Управление каналом</span>
+                <span className="visually-hidden">{t('chat.channelMenu.dropdownEl')}</span>
               </Dropdown.Toggle>
 
               <Dropdown.Menu>
                 <Dropdown.Item onClick={() => setShowRenameModal(true)}>
-                  Переименовать
+                  {t('chat.channelMenu.renameBtn')}
                 </Dropdown.Item>
                 <Dropdown.Item onClick={() => setShowRemoveModal(true)}>
-                  Удалить
+                  {t('chat.channelMenu.removeBtn')}
                 </Dropdown.Item>
               </Dropdown.Menu>
             </Dropdown>
@@ -54,7 +56,6 @@ const Channel = ({ channel, handleClick, currentChannelId, defaultChannelId }) =
             show={showRemoveModal}
             onClose={() => setShowRemoveModal(false)}
             channelId={channel.id}
-            channelName={channel.name}
             defaultChannelId={defaultChannelId}
             currentChannelId={currentChannelId}
             handleSwitchChannel={handleClick}

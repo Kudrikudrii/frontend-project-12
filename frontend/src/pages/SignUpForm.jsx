@@ -8,8 +8,10 @@ import { setCredentials } from '../slices/authSlice.js';
 import routes from '../routes.js';
 import * as Yup from 'yup';
 import avatar from '../assets/avatar_1-D7Cot-zE.jpg';
+import { useTranslation } from 'react-i18next';
 
 const SignUpForm = () => {
+  const { t } = useTranslation();
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef();
@@ -23,15 +25,15 @@ const SignUpForm = () => {
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
-      .min(3, 'От 3 до 20 символов')
-      .max(20, 'От 3 до 20 символов')
-      .required('Обязательное поле'),
+      .required(t('signup.feedbacks.required'))
+      .min(3, t('signup.feedbacks.username'))
+      .max(30, t('signup.feedbacks.username')),
     password: Yup.string()
-      .min(6, 'Не менее 6 символов')
-      .required('Обязательное поле'),
+      .min(6, t('signup.feedbacks.password'))
+      .required(t('signup.feedbacks.required')),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], 'Пароли должны совпадать')
-      .required('Обязательное поле'),
+      .oneOf([Yup.ref('password'), null], t('signup.feedbacks.confirmPassword'))
+      .required(t('signup.feedbacks.required')),
   });
 
   const formik = useFormik({
@@ -71,9 +73,9 @@ const SignUpForm = () => {
       if (err.isAxiosError) {
         setSignupFailed(true);
         if (err.response?.status === 409) {
-          setErrorMessage('Такой пользователь уже существует');
+          setErrorMessage(t('signup.feedbacks.uniqueUser'));
         } else {
-          setErrorMessage(err.response?.data?.message || 'Ошибка при регистрации');
+          setErrorMessage(err.response?.data?.message || t('signup.feedbacks.error'));
         }
         inputRef.current.select();
         return;
@@ -90,7 +92,10 @@ const SignUpForm = () => {
           <div className='d-flex flex-column h-100'>
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
-                <Link className="navbar-brand" to="/">Hexlet Chat</Link>
+                <Link 
+                  className="navbar-brand"
+                  to="/">{t('mainHeadrer.hexletChat')}
+                </Link>
               </div>
             </nav>
             <div className='container-fluid h-100'>
@@ -109,14 +114,14 @@ const SignUpForm = () => {
                         onSubmit={formik.handleSubmit}
                         className='col-12 col-md-6 mt-3 mt-md-0'
                       >
-                        <h1 className='text-center mb-4'>Регистрация</h1>
+                        <h1 className='text-center mb-4'>{t('signup.header')}</h1>
                         <fieldset>
                           <Form.Group className='form-floating mb-3'>
                             <Form.Control
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.username}
-                              placeholder='От 3 до 20 символов'
+                              placeholder={t('signup.feedbacks.username')}
                               name='username'
                               id='username'
                               autoComplete='username'
@@ -124,7 +129,7 @@ const SignUpForm = () => {
                               required
                               ref={inputRef}
                             />
-                            <Form.Label htmlFor='username'>Имя пользователя</Form.Label>
+                            <Form.Label htmlFor='username'>{t('signup.username')}</Form.Label>
                             <Form.Control.Feedback type="invalid">
                               {formik.errors.username}
                             </Form.Control.Feedback>
@@ -136,14 +141,14 @@ const SignUpForm = () => {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.password}
-                              placeholder='Не менее 6 символов'
+                              placeholder={t('signup.feedbacks.password')}
                               name='password'
                               id='password'
                               autoComplete='new-password'
                               isInvalid={(formik.touched.password && !!formik.errors.password) || signupFailed}
                               required
                             />
-                            <Form.Label htmlFor='password'>Пароль</Form.Label>
+                            <Form.Label htmlFor='password'>{t('signup.password')}</Form.Label>
                             <Form.Control.Feedback type="invalid">
                               {formik.errors.password}
                             </Form.Control.Feedback>
@@ -155,14 +160,14 @@ const SignUpForm = () => {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.confirmPassword}
-                              placeholder='Пароли должны совпадать'
+                              placeholder={t('signup.feedbacks.uniqueUser')}
                               name='confirmPassword'
                               id='confirmPassword'
                               autoComplete='new-password'
                               isInvalid={(formik.touched.confirmPassword && !!formik.errors.confirmPassword) || signupFailed}
                               required
                             />
-                            <Form.Label htmlFor='confirmPassword'>Подтвердите пароль</Form.Label>
+                            <Form.Label htmlFor='confirmPassword'>{t('signup.confirmPassword')}</Form.Label>
                             <Form.Control.Feedback type="invalid">
                               {formik.errors.confirmPassword || errorMessage}
                             </Form.Control.Feedback>
@@ -174,7 +179,7 @@ const SignUpForm = () => {
                             variant='outline-primary'
                             disabled={formik.isSubmitting}
                           >
-                            Зарегистрироваться
+                            {t('signup.submit')}
                           </Button>
                         </fieldset>
                       </Form>
