@@ -1,6 +1,6 @@
 export default {
   translation: {
-    mainHeadrer: {
+    mainHeader: {
         hexletChat: 'Hexlet Chat',
         signOut: 'Выйти',
     },
