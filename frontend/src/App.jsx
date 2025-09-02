@@ -7,8 +7,15 @@ import ChannelsPage from './pages/ChannelsPage.jsx';
 import RequireAuth from './pages/RequireAuth.jsx';
 import SignUpForm from './pages/SignUpForm.jsx';
 import './App.css';
+import { useEffect } from 'react';
+import leoProfanity from 'leo-profanity';
 
 function App() {
+
+  useEffect(() => {
+    leoProfanity.loadDictionary('ru');
+  }, []);
+
   return (
     <I18nextProvider i18n={i18next}>
       <BrowserRouter>
