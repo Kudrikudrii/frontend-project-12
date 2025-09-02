@@ -69,7 +69,9 @@ const LoginPage = () => {
               <div className="container">
                 <Link
                   className="navbar-brand"
-                  to="/">{t('mainHeader.hexletChat')}
+                  to="/"
+                >
+                  {t('mainHeader.hexletChat')}
                 </Link>
               </div>
             </nav>
