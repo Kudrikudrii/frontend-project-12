@@ -6,6 +6,7 @@ import getAuthToken from '../../getAuthToken';
 import routes from '../../routes';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
 
 const AddChannelModal = ({ show, onClose }) => {
   const { t } = useTranslation();
@@ -30,8 +31,9 @@ const AddChannelModal = ({ show, onClose }) => {
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
+        const filteredChannelName = leoProfanity.clean(values.name);
         const newChannel = {
-          name: values.name,
+          name: filteredChannelName,
         };
         await axios.post(routes.channelsPath(), newChannel, {
           headers: getAuthToken() // { id: '3', name: 'new name channel', removable: true }
