@@ -14,7 +14,7 @@ const PageNotFound = () => {
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
                 <a className="navbar-brand" href="/">
-                  {t('mainHeadrer.hexletChat')}
+                  {t('mainHeader.hexletChat')}
                 </a>
               </div>
             </nav>

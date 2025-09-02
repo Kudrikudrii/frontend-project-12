@@ -94,7 +94,7 @@ const SignUpForm = () => {
               <div className="container">
                 <Link 
                   className="navbar-brand"
-                  to="/">{t('mainHeadrer.hexletChat')}
+                  to="/">{t('mainHeader.hexletChat')}
                 </Link>
               </div>
             </nav>
