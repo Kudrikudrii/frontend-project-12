@@ -89,7 +89,7 @@ const LoginPage = () => {
                         onSubmit={formik.handleSubmit}
                         className='col-12 col-md-6 mt-3 mt-md-0'
                       >
-                        <h1 className='text-center mb-4'>Войти</h1>
+                        <h1 className='text-center mb-4'>{t('loginPage.header')}</h1>
                         <fieldset>
                           <Form.Group className='form-floating mb-3'>
                             <Form.Control
@@ -134,9 +134,12 @@ const LoginPage = () => {
                     </div>
                     <div className='card-footer p-4 d-flex align-items-center justify-content-center'>
                       <div className="text-center">
-                        <Trans i18nKey="loginPage.noSignUpWithLink">
-                          Нет аккаунта? <Link to="/signup" className="text-decoration-none">Регистрация</Link>
-                        </Trans>
+                        <Trans 
+                          i18nKey="loginPage.noSignUpWithLink"
+                          components={{
+                            1: <Link to="/signup" className="text-decoration-none" />
+                          }}
+                        />                      
                       </div>
                     </div>
                   </div>

@@ -1,7 +1,7 @@
 import React from 'react';
 import avatar from '../assets/404-D_FLHmTM.svg';
 import { Trans, useTranslation } from 'react-i18next';
-import { Link } from 'react-router-dom'; // Используйте Link вместо <a> для SPA
+import { Link } from 'react-router-dom';
 
 const PageNotFound = () => {
   const { t } = useTranslation();
