@@ -4,6 +4,7 @@ import axios from 'axios';
 import { useRef, useEffect } from 'react';
 import routes from '../routes';
 import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
 
 const MessageForm = ({ currentChannelId, username }) => {
   const { t } = useTranslation();
@@ -18,8 +19,9 @@ const MessageForm = ({ currentChannelId, username }) => {
       body: '',
     },
     onSubmit: async (values) => {
+      const filteredMessage = leoProfanity.clean(values.body);
       const newMessage = {
-        body: values.body,
+        body: filteredMessage,
         channelId: currentChannelId,
         username,
       }

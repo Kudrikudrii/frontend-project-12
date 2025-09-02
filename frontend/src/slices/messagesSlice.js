@@ -1,4 +1,5 @@
 import { createSlice } from '@reduxjs/toolkit';
+import leoProfanity from 'leo-profanity';
 
 const initialState = {
   messages: [],
@@ -12,7 +13,11 @@ const slice = createSlice({
       state.messages = payload;
     },
     addMessage: (state, { payload }) => {
-      state.messages = [...state.messages, payload]
+      const filteredMessage = {
+        ...payload,
+        body: leoProfanity.clean(payload.body)
+      };
+      state.messages.push(filteredMessage);
     },
     removeMessages: (state, { payload }) => {
       state.messages = state.messages.filter(m => m.channelId !== payload.id);
