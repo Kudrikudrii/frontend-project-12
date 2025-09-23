@@ -9,6 +9,8 @@ import SignUpForm from './pages/SignUpForm.jsx';
 import './App.css';
 import { useEffect } from 'react';
 import leoProfanity from 'leo-profanity';
+import { RollbarProvider } from '@rollbar/react'
+import { rollbarConfig } from './rollbar.config.js'
 
 function App() {
 
@@ -17,23 +19,25 @@ function App() {
   }, []);
 
   return (
-    <I18nextProvider i18n={i18next}>
-      <BrowserRouter>
-        <Routes>
-          <Route
-            path='/'
-            element={
-              <RequireAuth>
-                <ChannelsPage />
-              </RequireAuth>
-            }
-          />
-          <Route path='/login' element={<LoginForm />} />
-          <Route path='/signup' element={<SignUpForm />} />
-          <Route path='*' element={<PageNotFound />} />
-        </Routes>
-      </BrowserRouter>
-    </I18nextProvider>
+    <RollbarProvider config={rollbarConfig}>
+      <I18nextProvider i18n={i18next}>
+        <BrowserRouter>
+          <Routes>
+            <Route
+              path='/'
+              element={
+                <RequireAuth>
+                  <ChannelsPage />
+                </RequireAuth>
+              }
+            />
+            <Route path='/login' element={<LoginForm />} />
+            <Route path='/signup' element={<SignUpForm />} />
+            <Route path='*' element={<PageNotFound />} />
+          </Routes>
+        </BrowserRouter>
+      </I18nextProvider>
+    </RollbarProvider>
   );
 }
 
