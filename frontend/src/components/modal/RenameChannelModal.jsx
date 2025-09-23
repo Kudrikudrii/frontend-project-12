@@ -7,11 +7,12 @@ import * as Yup from 'yup';
 import { useDispatch } from 'react-redux';
 import { renameChannel } from '../../slices/channelsSlice';
 import { useTranslation } from 'react-i18next';
-
+import { useRollbar } from '@rollbar/react';
 
 const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
+  const rollbar = useRollbar();
 
   const formik = useFormik({
     initialValues: {
@@ -34,6 +35,13 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
         onClose();
       } catch (error) {
         console.error('Ошибка при переименовании канала:', error);
+        rollbar.error('Ошибка при переименовании канала:', error, {
+          endpoint: routes.channelsPath(channelId),
+          method: 'PATCH',
+          timestamp: new Date().toISOString(),
+          component: 'RenameChannelModal',
+          action: 'formik'
+        });
         if (error.response?.status === 409) {
           formik.setFieldError(t('modal.error.notOneOf'));
         }

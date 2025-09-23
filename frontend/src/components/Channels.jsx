@@ -1,33 +1,50 @@
 import { useDispatch, useSelector } from 'react-redux';
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import Channel from './Channel';
 import AddChannelModal from './modal/AddChannelModal';
-import { useEffect } from 'react';
 import { addChannel, removeChannel } from '../slices/channelsSlice';
 import { removeMessages } from '../slices/messagesSlice';
 import socket from '../socket';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 
 const Channels = ({ currentChannelId, handleClick, defaultChannelId }) =>  {
   const dispatch = useDispatch();
   const channels = useSelector((state) => state.channels.channels)
   const [showModal, setShowModal] = useState(false);
   const { t } = useTranslation();
+  const rollbar = useRollbar();
 
   useEffect(() => {
     const handleNewChannel = (channel) => {
-      dispatch(addChannel(channel)); // { id: '3', name: 'new name channel', removable: true }
-      handleClick(channel.id);
-    };
+      try {
+        dispatch(addChannel(channel)); // { id: '3', name: 'new name channel', removable: true }
+        handleClick(channel.id);
+      } catch (error) {
+        rollbar.error('Ошибка при создании канала', error, {
+        channelData: channel,
+        component: 'Channels',
+        action: 'handleNewChannel'
+        });
+      };
+    }
 
     const handleChannelRemoved = ({ id }) => {
-      dispatch(removeChannel({ id }));
-      dispatch(removeMessages({ channelId: id }));
-      if (currentChannelId === id) {
-        handleClick(defaultChannelId);
-      } 
+      try {
+        dispatch(removeChannel({ id }));
+        dispatch(removeMessages({ channelId: id }));
+        if (currentChannelId === id) {
+          handleClick(defaultChannelId);
+        }
+      } catch (error) {
+        rollbar.error('Ошибка при удалении канала', error, {
+          channelId: id,
+          component: 'Channels',
+          action: 'handleChannelRemoved'
+        });
+      }
     };
-    
+      
     socket.on('newChannel', handleNewChannel);
     socket.on('removeChannel', handleChannelRemoved);
 
@@ -35,7 +52,8 @@ const Channels = ({ currentChannelId, handleClick, defaultChannelId }) =>  {
       socket.off('newChannel', handleNewChannel);
       socket.off('removeChannel', handleChannelRemoved);
     } 
-  }, [currentChannelId, defaultChannelId, dispatch, handleClick]);
+  }, [currentChannelId, defaultChannelId, dispatch, handleClick, rollbar]);
+
     
     return (
     <div className='col-4 col-md-2 border-end px-0 bg-light flex-column h-100 d-flex'>

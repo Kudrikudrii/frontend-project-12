@@ -6,6 +6,7 @@ import ActiveChannel from './ActiveChannel.jsx';
 import { addMessage } from '../slices/messagesSlice.js';
 import socket from '../socket.js';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 
 const Messages = ({ currentChannelId }) =>  {
   const { t } = useTranslation();
@@ -13,23 +14,30 @@ const Messages = ({ currentChannelId }) =>  {
   const messages = useSelector((state) => state.messages.messages)
   const channels = useSelector((state) => state.channels.channels)
   const username = useSelector((state) => state.auth.username);
-  
+  const rollbar = useRollbar();
+
   useEffect(() => {
     const handleNewMessage = (message) => {
-      dispatch(addMessage(message));
-    };
+      try {
+        dispatch(addMessage(message));
+      } catch (error) {
+        rollbar.error('Ошибка при отправке сообщения', error, {
+          channelData: message,
+          component: 'Messages',
+          action: 'handleNewMessage'
+        });
+      }
+    }
 
     socket.on('newMessage', handleNewMessage);
 
     return () => {
       socket.off('newMessage', handleNewMessage);
     };
-  }, [dispatch]);
+  }, [dispatch, rollbar]);
   
   const channelMessages = messages.filter((message) => message.channelId === currentChannelId)
-  console.log(messages)
   const activeChannelData = channels.find((channel) => channel.id === currentChannelId);
-  console.log(channels)
 
   if (!activeChannelData) {
     return (

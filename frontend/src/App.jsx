@@ -9,8 +9,8 @@ import SignUpForm from './pages/SignUpForm.jsx';
 import './App.css';
 import { useEffect } from 'react';
 import leoProfanity from 'leo-profanity';
-import { RollbarProvider } from '@rollbar/react'
-import { rollbarConfig } from './rollbar.config.js'
+import { Provider as RollbarProvider } from '@rollbar/react';
+import { rollbarConfig } from './rollbar.config.js';
 
 function App() {
 

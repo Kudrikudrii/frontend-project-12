@@ -9,11 +9,13 @@ import Channels from '../components/Channels.jsx';
 import Messages from '../components/Messages.jsx';
 import { setMessages } from '../slices/messagesSlice.js';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 
 const ChannelsPage = () => {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const dispatch = useDispatch();
+  const rollbar = useRollbar();
   const [currentChannelId, setCurrentChannelId] = useState('');
   const defaultChannelId = useSelector(state => 
     state.channels.channels.find(c => c.name === 'general')?.id || '1'
@@ -21,42 +23,64 @@ const ChannelsPage = () => {
   
   useEffect(() => {
     const fetchContent = async () => {
+      const token = localStorage.getItem('token');
+      
+      if (!token) {
+        navigate('/login');
+        return;
+      }
+
       try {
-        const responseChannels = await axios.get(routes.channelsPath(), {
-          headers: getAuthToken(),
-        });
-        const channels = responseChannels?.data;
+        const [channelsResponse, messagesResponse] = await Promise.all([
+          axios.get(routes.channelsPath(), { headers: getAuthToken() }),
+          axios.get(routes.messagesPath(), { headers: getAuthToken() })
+        ]);
+
+        const channels = channelsResponse?.data;
+        const messages = messagesResponse?.data;
+
         dispatch(setChannels(channels));
+        dispatch(setMessages(messages));
 
         if (!currentChannelId && channels.length > 0) {
           setCurrentChannelId(channels[0].id);
         }
+      } catch (error) {
+        let errorContext = {
+          endpoint: `${routes.channelsPath()} and ${routes.messagesPath()}`,
+          method: 'GET',
+          timestamp: new Date().toISOString(),
+          component: 'ChannelsPage',
+          action: 'fetchContent'
+        };
 
-        const responseMessages = await axios.get(routes.messagesPath(), {
-          headers: getAuthToken(),
-        });
-        const messages = responseMessages?.data;
-        dispatch(setMessages(messages));
-
-      } catch (err) {
-        console.error('Ошибка при загрузке каналов:', err);
-        if (err.response?.status === 401) {
+        if (error.response.status === 401) {
+          rollbar.warning('Неавторизованный доступ', error, errorContext);
           localStorage.removeItem('token');
           navigate('/login');
+          return;
+        } else if (error.response.status >= 500) {
+          rollbar.critical('Ошибка сервера', error, errorContext);
+        } else {
+          rollbar.error('Ошибка клиента', error, errorContext);
         }
+      console.error('Ошибка при загрузке каналов:', error);
       }
     };
 
     fetchContent();
-    const token = localStorage.getItem('token');
-    if (!token) {
-      navigate('/login');
-    }
-  }, [dispatch, navigate, currentChannelId]);
+  }, [dispatch, navigate, currentChannelId, rollbar]);
 
   const handleLogout = () => {
-    localStorage.removeItem('token');
-    navigate('/login');
+    try {
+      localStorage.removeItem('token');
+      navigate('/login');
+    } catch (error) {
+      rollbar.error('Ошибка при выходе из системы', error, {
+        component: 'ChannelsPage',
+        action: 'handleLogout'
+      });
+    }
   };
 
   return (

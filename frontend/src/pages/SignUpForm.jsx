@@ -9,19 +9,20 @@ import routes from '../routes.js';
 import * as Yup from 'yup';
 import avatar from '../assets/avatar_1-D7Cot-zE.jpg';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
   const dispatcher = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef();
+  const rollbar = useRollbar();
 
   useEffect(() => {
     inputRef.current.focus();
   }, []);
 
   const [signupFailed, setSignupFailed] = useState(false);
-  const [errorMessage, setErrorMessage] = useState('');
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
@@ -63,24 +64,16 @@ const SignUpForm = () => {
           localStorage.setItem('username', username);
           navigate('/');
         } 
-      } catch (err) {
-        console.error("Ошибка:", {
-          status: err.response?.status, 
-          data: err.response?.data, 
-          headers: err.response?.headers,
+      } catch (error) {
+        console.error('Ошибка при создании аккаунта:', error);
+        rollbar.error('Ошибка при создании аккаунта:', error, {
+          endpoint: routes.newUserPath(),
+          method: 'POST',
+          timestamp: new Date().toISOString(),
+          username: values.username,
+          component: 'SignUpForm',
+          action: formik
         });
-
-      if (err.isAxiosError) {
-        setSignupFailed(true);
-        if (err.response?.status === 409) {
-          setErrorMessage(t('signup.feedbacks.uniqueUser'));
-        } else {
-          setErrorMessage(err.response?.data?.message || t('signup.feedbacks.error'));
-        }
-        inputRef.current.select();
-        return;
-      }
-        throw err;
       }
     },
   });
@@ -169,7 +162,7 @@ const SignUpForm = () => {
                             />
                             <Form.Label htmlFor='confirmPassword'>{t('signup.confirmPassword')}</Form.Label>
                             <Form.Control.Feedback type="invalid">
-                              {formik.errors.confirmPassword || errorMessage}
+                              {formik.errors.confirmPassword}
                             </Form.Control.Feedback>
                           </Form.Group>
 

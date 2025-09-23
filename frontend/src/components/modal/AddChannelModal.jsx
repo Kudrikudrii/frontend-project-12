@@ -7,9 +7,11 @@ import routes from '../../routes';
 import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
+import { useRollbar } from '@rollbar/react';
 
 const AddChannelModal = ({ show, onClose }) => {
   const { t } = useTranslation();
+  const rollbar = useRollbar();
 
   const inputRef = useRef();
 
@@ -42,6 +44,12 @@ const AddChannelModal = ({ show, onClose }) => {
         onClose();
       } catch (error) {
         console.error('Ошибка при создании канала:', error);
+        rollbar.error('Ошибка при создании канала:', error, {
+          endpoint: routes.channelsPath(),
+          method: 'POST',
+          timestamp: new Date().toISOString(),
+          component: 'AddChannelModal'
+        });
         if (error.response?.status === 409) {
           formik.setFieldError(t('modal.error.notOneOf'));
         }

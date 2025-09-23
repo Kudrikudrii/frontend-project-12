@@ -3,6 +3,7 @@ import axios from 'axios';
 import getAuthToken from '../../getAuthToken';
 import routes from '../../routes';
 import { useTranslation } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 
 const RemoveChannelModal = ({
   show,
@@ -12,6 +13,7 @@ const RemoveChannelModal = ({
   currentChannelId,
   handleSwitchChannel
 }) => {
+  const rollbar = useRollbar();
   const { t } = useTranslation();
 
   const handleRemove = async () => {
@@ -27,6 +29,13 @@ const RemoveChannelModal = ({
       onClose();
     } catch (error) {
       console.error('Ошибка при удалении канала:', error);
+      rollbar.error('Ошибка при удалении канала:', error, {
+          endpoint: routes.channelsPath(channelId),
+          method: 'DELETE',
+          timestamp: new Date().toISOString(),
+          component: 'RemoveChannelModal',
+          action: 'handleRemove'
+        });
     }
   };
 

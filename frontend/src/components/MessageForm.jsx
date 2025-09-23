@@ -5,9 +5,11 @@ import { useRef, useEffect } from 'react';
 import routes from '../routes';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
+import { useRollbar } from '@rollbar/react';
 
 const MessageForm = ({ currentChannelId, username }) => {
   const { t } = useTranslation();
+  const rollbar = useRollbar();
 
   const inputRef = useRef();
   useEffect(() => {
@@ -32,7 +34,14 @@ const MessageForm = ({ currentChannelId, username }) => {
         formik.resetForm();
         inputRef.current.focus();
       } catch (error) {
-        console.error('Error sending message:', error);
+        console.error('Ошибка при отправке сообщения:', error);
+        rollbar.error('Ошибка при отправке сообщения:', error, {
+          endpoint: routes.messagesPath(),
+          method: 'POST',
+          timestamp: new Date().toISOString(),
+          component: 'MessageForm',
+          action: formik
+        });
       }
     },
   });

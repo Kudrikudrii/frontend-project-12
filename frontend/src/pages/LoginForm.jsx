@@ -8,12 +8,14 @@ import { setCredentials } from '../slices/authSlice.js';
 import routes from '../routes.js';
 import avatar from '../assets/avatar-DIE1AEpS.jpg';
 import { useTranslation, Trans } from 'react-i18next';
+import { useRollbar } from '@rollbar/react';
 
 const LoginPage = () => {
   const { t } = useTranslation();
-  const dispatcher = useDispatch();
+  const dispatch = useDispatch();
   const navigate = useNavigate();
   const inputRef = useRef();
+  const rollbar = useRollbar();
 
   useEffect(() => {
     inputRef.current.focus();
@@ -32,7 +34,7 @@ const LoginPage = () => {
         if (response.status === 200) {
           console.log(response.data);
           const { username, token } = response.data;
-          dispatcher(
+          dispatch(
             setCredentials({
               username,
               token,
@@ -44,18 +46,21 @@ const LoginPage = () => {
         } else {
           setAuthFailed(true);
         }
-      } catch (err) {
-        ("Ошибка:", {
-          status: err.response?.status, 
-          data: err.response?.data, 
-          headers: err.response?.headers,
+      } catch (error) {
+        console.error('Ошибка при входе в аккаунт:', error);
+        rollbar.error('Ошибка при входе в аккаунт:', error, {
+          endpoint: routes.loginPath(),
+          method: 'POST',
+          timestamp: new Date().toISOString(),
+          username: values.username,
+          component: 'LoginPage',
+          action: formik
         });
-        if (err.isAxiosError && err.response.status === 401) {
+        if (error.isAxiosError && error.response.status === 401) {
           setAuthFailed(true);
           inputRef.current.select();
           return;
         }
-        throw err;
       }
     },
   });
