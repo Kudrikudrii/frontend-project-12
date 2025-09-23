@@ -2,8 +2,13 @@
 export const rollbarConfig = {
   accessToken: import.meta.env.VITE_ROLLBAR_ACCESS_TOKEN,
   environment: import.meta.env.MODE || 'production',
-  captureUncaught: true,
-  captureUnhandledRejections: true,
+  captureUncaught: import.meta.env.PROD,
+  captureUnhandledRejections: import.meta.env.PROD,
+  enabled: import.meta.env.PROD,
+
+  itemsPerMinute: 10,
+  maxItems: 50,
+  
   payload: {
     client: {
       javascript: {
