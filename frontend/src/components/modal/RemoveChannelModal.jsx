@@ -6,7 +6,14 @@ import { useTranslation } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
 
-const RemoveChannelModal = ({ show, onClose, channelId, defaultChannelId, currentChannelId, handleSwitchChannel }) => {
+const RemoveChannelModal = ({
+  show,
+  onClose,
+  channelId,
+  defaultChannelId,
+  currentChannelId,
+  handleSwitchChannel,
+}) => {
   const rollbar = useRollbar();
   const { t } = useTranslation();
 
@@ -37,7 +44,10 @@ const RemoveChannelModal = ({ show, onClose, channelId, defaultChannelId, curren
   };
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal
+      show={show}
+      onHide={onClose}
+      centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('modal.removeChannel.title')}</Modal.Title>
       </Modal.Header>
@@ -47,14 +57,12 @@ const RemoveChannelModal = ({ show, onClose, channelId, defaultChannelId, curren
           <Button
             variant='secondary'
             onClick={onClose}
-            className='me-2'
-          >
+            className='me-2'>
             {t('modal.cancelBtn')}
           </Button>
           <Button
             variant='danger'
-            onClick={handleRemove}
-          >
+            onClick={handleRemove}>
             {t('modal.removeChannel.deleteBtn')}
           </Button>
         </div>
