@@ -10,6 +10,7 @@ import * as Yup from 'yup';
 import avatar from '../assets/avatar_1-D7Cot-zE.jpg';
 import { useTranslation } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
 
 const SignUpForm = () => {
   const { t } = useTranslation();
@@ -74,6 +75,9 @@ const SignUpForm = () => {
           component: 'SignUpForm',
           action: formik
         });
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
+        }
       }
     },
   });

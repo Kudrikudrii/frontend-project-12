@@ -4,15 +4,19 @@ import { Modal, Button, Form } from 'react-bootstrap';
 import getAuthToken from '../../getAuthToken';
 import routes from '../../routes';
 import * as Yup from 'yup';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { renameChannel } from '../../slices/channelsSlice';
 import { useTranslation } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
 
 const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rollbar = useRollbar();
+
+  const channels = useSelector((state) => state.channels.channels)
+  const existingChannelNames = channels.map(channel => channel.name.toLowerCase());
 
   const formik = useFormik({
     initialValues: {
@@ -23,6 +27,10 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
         .required(t('modal.error.required'))
         .min(3, t('modal.error.length'))
         .max(30, t('modal.error.length'))
+        .test(
+          t('modal.error.notOneOf'),
+          (value) => !existingChannelNames.includes(value.toLowerCase())
+        )
     }),
     onSubmit: async (values) => {
       try {
@@ -32,6 +40,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
           { headers: getAuthToken() }
         );
         dispatch(renameChannel({ id: channelId, name: values.name }));
+        toast.success(t('toast.renamedChannel'));
         onClose();
       } catch (error) {
         console.error('Ошибка при переименовании канала:', error);
@@ -44,6 +53,9 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
         });
         if (error.response?.status === 409) {
           formik.setFieldError(t('modal.error.notOneOf'));
+        }
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
         }
       }
     },

@@ -4,6 +4,7 @@ import getAuthToken from '../../getAuthToken';
 import routes from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
 
 const RemoveChannelModal = ({
   show,
@@ -25,7 +26,7 @@ const RemoveChannelModal = ({
       if (currentChannelId === channelId) {
         handleSwitchChannel(defaultChannelId);
       }
-      
+      toast.success(t('toast.removedChannel'));
       onClose();
     } catch (error) {
       console.error('Ошибка при удалении канала:', error);
@@ -36,6 +37,9 @@ const RemoveChannelModal = ({
           component: 'RemoveChannelModal',
           action: 'handleRemove'
         });
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
+        }
     }
   };
 

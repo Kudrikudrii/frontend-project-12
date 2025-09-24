@@ -11,6 +11,7 @@ import { useEffect } from 'react';
 import leoProfanity from 'leo-profanity';
 import { Provider as RollbarProvider } from '@rollbar/react';
 import { rollbarConfig } from './rollbar.config.js';
+import { ToastContainer } from 'react-toastify';
 
 function App() {
 
@@ -35,6 +36,10 @@ function App() {
             <Route path='/signup' element={<SignUpForm />} />
             <Route path='*' element={<PageNotFound />} />
           </Routes>
+          <ToastContainer
+            position="top-right"
+            autoClose={5000}
+          />
         </BrowserRouter>
       </I18nextProvider>
     </RollbarProvider>

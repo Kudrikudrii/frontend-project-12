@@ -1,6 +1,5 @@
-import { Button } from 'react-bootstrap';
+import { Button, Dropdown } from 'react-bootstrap';
 import { useState } from 'react';
-import { Dropdown } from 'react-bootstrap';
 import RemoveChannelModal from './modal/RemoveChannelModal';
 import RenameChannelModal from './modal/RenameChannelModal';
 import { useTranslation } from 'react-i18next';

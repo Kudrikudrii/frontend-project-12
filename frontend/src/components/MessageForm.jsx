@@ -6,6 +6,7 @@ import routes from '../routes';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
 import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
 
 const MessageForm = ({ currentChannelId, username }) => {
   const { t } = useTranslation();
@@ -42,6 +43,9 @@ const MessageForm = ({ currentChannelId, username }) => {
           component: 'MessageForm',
           action: formik
         });
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
+        }
       }
     },
   });

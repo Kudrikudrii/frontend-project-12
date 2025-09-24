@@ -8,6 +8,8 @@ import * as Yup from 'yup';
 import { useTranslation } from 'react-i18next';
 import leoProfanity from 'leo-profanity';
 import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 const AddChannelModal = ({ show, onClose }) => {
   const { t } = useTranslation();
@@ -21,6 +23,9 @@ const AddChannelModal = ({ show, onClose }) => {
     }
   }, [show]);
 
+  const channels = useSelector((state) => state.channels.channels)
+  const existingChannelNames = channels.map(channel => channel.name.toLowerCase());
+
   const formik = useFormik({
     initialValues: {
       name: '',
@@ -30,6 +35,10 @@ const AddChannelModal = ({ show, onClose }) => {
         .required(t('modal.error.required'))
         .min(3, t('modal.error.length'))
         .max(30, t('modal.error.length'))
+        .test(
+          t('modal.error.notOneOf'),
+          (value) => !existingChannelNames.includes(value.toLowerCase())
+        )
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
@@ -40,6 +49,7 @@ const AddChannelModal = ({ show, onClose }) => {
         await axios.post(routes.channelsPath(), newChannel, {
           headers: getAuthToken() // { id: '3', name: 'new name channel', removable: true }
         });
+        toast.success(t('toast.createdChannel'));
         resetForm();
         onClose();
       } catch (error) {
@@ -50,6 +60,9 @@ const AddChannelModal = ({ show, onClose }) => {
           timestamp: new Date().toISOString(),
           component: 'AddChannelModal'
         });
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
+        }
         if (error.response?.status === 409) {
           formik.setFieldError(t('modal.error.notOneOf'));
         }

@@ -9,6 +9,7 @@ import routes from '../routes.js';
 import avatar from '../assets/avatar-DIE1AEpS.jpg';
 import { useTranslation, Trans } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
 
 const LoginPage = () => {
   const { t } = useTranslation();
@@ -60,6 +61,9 @@ const LoginPage = () => {
           setAuthFailed(true);
           inputRef.current.select();
           return;
+        }
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
         }
       }
     },

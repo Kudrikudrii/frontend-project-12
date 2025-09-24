@@ -10,6 +10,7 @@ import Messages from '../components/Messages.jsx';
 import { setMessages } from '../slices/messagesSlice.js';
 import { useTranslation } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
 
 const ChannelsPage = () => {
   const { t } = useTranslation();
@@ -64,12 +65,17 @@ const ChannelsPage = () => {
         } else {
           rollbar.error('Ошибка клиента', error, errorContext);
         }
+
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
+        }
+
       console.error('Ошибка при загрузке каналов:', error);
       }
     };
 
     fetchContent();
-  }, [dispatch, navigate, currentChannelId, rollbar]);
+  }, [dispatch, navigate, currentChannelId, rollbar, t]);
 
   const handleLogout = () => {
     try {
