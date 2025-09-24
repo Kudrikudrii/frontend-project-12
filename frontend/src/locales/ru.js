@@ -6,7 +6,7 @@ export default {
     },
     loginPage: {
       header: 'Войти',
-      username: 'Ваш логин',
+      username: 'Ваш ник',
       password: 'Пароль',
       invalidPassword: 'Неверные имя пользователя или пароль',
       submit: 'Войти',
