@@ -1,15 +1,26 @@
-install: # чистая установка зависимостей (устанавливает зависимости строго по package-lock.json)
+install:
 	npm ci
 
-link: # генерация ссылки для проекта
-	npm link
+start-frontend:
+	make -C frontend start
 
-# перед этим использовать make link (npm link)
-publish: #отладка публикации проекта
-	npm publish --dry-run
-
-build: # сборка проекта в папку ./frontend/dist
-	npm ci && cd frontend && npm ci && npm run build
-
-start: # запуск сервера
+start-backend:
 	npx start-server -s ./frontend/dist
+
+deploy:
+	git push heroku main
+
+start:
+	make start-backend
+
+develop:
+	make start-backend & make start-frontend
+
+build:
+	rm -rf ./frontend/dist && npm run build
+
+lint:
+	@echo "Lint step skipped"
+
+test:
+	@echo "Test step skipped"
