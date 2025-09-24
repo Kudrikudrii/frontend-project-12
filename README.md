@@ -8,4 +8,4 @@
 
 ## 🚀 Демо
 
-Приложение доступно по ссылке: [https://frontend-project-12-kyo7.onrender.com](https://frontend-project-12-kyo7.onrender.com)
+[🌐 Открыть приложение](https://frontend-project-12-kyo7.onrender.com)
