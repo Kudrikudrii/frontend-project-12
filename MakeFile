@@ -24,5 +24,7 @@ deploy:
 		git push heroku main
 
 setup:
-		npm ci
+		mkdir -p -m 777 ./tmp
+		npm i
+		ln -sf frontend code
 		make -C frontend install
