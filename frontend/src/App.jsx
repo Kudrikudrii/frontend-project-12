@@ -13,8 +13,7 @@ import { Provider as RollbarProvider } from '@rollbar/react';
 import { rollbarConfig } from './rollbar.config.js';
 import { ToastContainer } from 'react-toastify';
 
-function App() {
-
+const App = () => {
   useEffect(() => {
     leoProfanity.loadDictionary('ru');
   }, []);
@@ -32,18 +31,27 @@ function App() {
                 </RequireAuth>
               }
             />
-            <Route path='/login' element={<LoginForm />} />
-            <Route path='/signup' element={<SignUpForm />} />
-            <Route path='*' element={<PageNotFound />} />
+            <Route
+              path='/login'
+              element={<LoginForm />}
+            />
+            <Route
+              path='/signup'
+              element={<SignUpForm />}
+            />
+            <Route
+              path='*'
+              element={<PageNotFound />}
+            />
           </Routes>
           <ToastContainer
-            position="top-right"
+            position='top-right'
             autoClose={5000}
           />
         </BrowserRouter>
       </I18nextProvider>
     </RollbarProvider>
   );
-}
+};
 
 export default App;

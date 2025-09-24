@@ -15,8 +15,8 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   const dispatch = useDispatch();
   const rollbar = useRollbar();
 
-  const channels = useSelector((state) => state.channels.channels)
-  const existingChannelNames = channels.map(channel => channel.name.toLowerCase());
+  const channels = useSelector((state) => state.channels.channels);
+  const existingChannelNames = channels.map((channel) => channel.name.toLowerCase());
 
   const formik = useFormik({
     initialValues: {
@@ -27,18 +27,11 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
         .required(t('modal.error.required'))
         .min(3, t('modal.error.length'))
         .max(30, t('modal.error.length'))
-        .test(
-          t('modal.error.notOneOf'),
-          (value) => !existingChannelNames.includes(value.toLowerCase())
-        )
+        .test(t('modal.error.notOneOf'), (value) => !existingChannelNames.includes(value.toLowerCase())),
     }),
     onSubmit: async (values) => {
       try {
-        await axios.patch(
-          routes.channelsPath(channelId),
-          { name: values.name },
-          { headers: getAuthToken() }
-        );
+        await axios.patch(routes.channelsPath(channelId), { name: values.name }, { headers: getAuthToken() });
         dispatch(renameChannel({ id: channelId, name: values.name }));
         toast.success(t('toast.renamedChannel'));
         onClose();
@@ -49,20 +42,23 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
           method: 'PATCH',
           timestamp: new Date().toISOString(),
           component: 'RenameChannelModal',
-          action: 'formik'
+          action: 'formik',
         });
         if (error.response?.status === 409) {
           formik.setFieldError(t('modal.error.notOneOf'));
         }
         if (error.status === 'FETCH_ERROR') {
-          toast.error(t('toast.fetchError'))
+          toast.error(t('toast.fetchError'));
         }
       }
     },
   });
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal
+      show={show}
+      onHide={onClose}
+      centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('modal.renameChannel.title')}</Modal.Title>
       </Modal.Header>
@@ -70,26 +66,26 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group>
             <Form.Control
-              type="text"
-              name="name"
+              type='text'
+              name='name'
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               isInvalid={formik.touched.name && !!formik.errors.name}
             />
-            <Form.Control.Feedback type="invalid">
-              {formik.errors.name}
-            </Form.Control.Feedback>
+            <Form.Control.Feedback type='invalid'>{formik.errors.name}</Form.Control.Feedback>
           </Form.Group>
-          <div className="d-flex justify-content-end mt-3">
-            <Button variant="secondary" onClick={onClose} className="me-2">
+          <div className='d-flex justify-content-end mt-3'>
+            <Button
+              variant='secondary'
+              onClick={onClose}
+              className='me-2'>
               {t('modal.cancelBtn')}
             </Button>
-            <Button 
-              variant="primary" 
-              type="submit"
-              disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}
-            >
+            <Button
+              variant='primary'
+              type='submit'
+              disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}>
               {t('modal.confirmBtn')}
             </Button>
           </div>

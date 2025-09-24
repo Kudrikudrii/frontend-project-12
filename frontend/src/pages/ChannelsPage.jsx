@@ -18,14 +18,15 @@ const ChannelsPage = () => {
   const dispatch = useDispatch();
   const rollbar = useRollbar();
   const [currentChannelId, setCurrentChannelId] = useState('');
-  const defaultChannelId = useSelector(state => 
-    state.channels.channels.find(c => c.name === 'general')?.id || '1'
-  );  
-  
+  const defaultChannelId = useSelector(
+    (state) =>
+      state.channels.channels.find((c) => c.name === 'general')?.id || '1'
+  );
+
   useEffect(() => {
     const fetchContent = async () => {
       const token = localStorage.getItem('token');
-      
+
       if (!token) {
         navigate('/login');
         return;
@@ -34,7 +35,7 @@ const ChannelsPage = () => {
       try {
         const [channelsResponse, messagesResponse] = await Promise.all([
           axios.get(routes.channelsPath(), { headers: getAuthToken() }),
-          axios.get(routes.messagesPath(), { headers: getAuthToken() })
+          axios.get(routes.messagesPath(), { headers: getAuthToken() }),
         ]);
 
         const channels = channelsResponse?.data;
@@ -52,7 +53,7 @@ const ChannelsPage = () => {
           method: 'GET',
           timestamp: new Date().toISOString(),
           component: 'ChannelsPage',
-          action: 'fetchContent'
+          action: 'fetchContent',
         };
 
         if (error.response.status === 401) {
@@ -67,10 +68,10 @@ const ChannelsPage = () => {
         }
 
         if (error.status === 'FETCH_ERROR') {
-          toast.error(t('toast.fetchError'))
+          toast.error(t('toast.fetchError'));
         }
 
-      console.error('Ошибка при загрузке каналов:', error);
+        console.error('Ошибка при загрузке каналов:', error);
       }
     };
 
@@ -84,7 +85,7 @@ const ChannelsPage = () => {
     } catch (error) {
       rollbar.error('Ошибка при выходе из системы', error, {
         component: 'ChannelsPage',
-        action: 'handleLogout'
+        action: 'handleLogout',
       });
     }
   };
@@ -92,14 +93,21 @@ const ChannelsPage = () => {
   return (
     <div className='vh-100 bg-light'>
       <div className='h-100'>
-        <div className='h-100' id='chat'>
+        <div
+          className='h-100'
+          id='chat'>
           <div className='d-flex flex-column h-100'>
             <nav className='shadow-sm navbar navbar-expand-lg navbar-light bg-white'>
               <div className='container'>
-                <a className='navbar-brand' href='/'>
+                <a
+                  className='navbar-brand'
+                  href='/'>
                   {t('mainHeader.hexletChat')}
                 </a>
-                <button type='button' className='btn btn-primary' onClick={handleLogout}>
+                <button
+                  type='button'
+                  className='btn btn-primary'
+                  onClick={handleLogout}>
                   {t('mainHeader.signOut')}
                 </button>
               </div>
@@ -108,7 +116,7 @@ const ChannelsPage = () => {
               <div className='row h-100 bg-white flex-md-row'>
                 <Channels
                   currentChannelId={currentChannelId}
-                  handleClick={setCurrentChannelId} 
+                  handleClick={setCurrentChannelId}
                   defaultChannelId={defaultChannelId}
                 />
                 <Messages currentChannelId={currentChannelId} />

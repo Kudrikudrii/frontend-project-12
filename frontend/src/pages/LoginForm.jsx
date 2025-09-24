@@ -55,7 +55,7 @@ const LoginPage = () => {
           timestamp: new Date().toISOString(),
           username: values.username,
           component: 'LoginPage',
-          action: formik
+          action: formik,
         });
         if (error.isAxiosError && error.response.status === 401) {
           setAuthFailed(true);
@@ -63,23 +63,24 @@ const LoginPage = () => {
           return;
         }
         if (error.status === 'FETCH_ERROR') {
-          toast.error(t('toast.fetchError'))
+          toast.error(t('toast.fetchError'));
         }
       }
     },
   });
 
   return (
-    <div className="h-100 bg-light">
-      <div className="h-100">
-        <div className="h-100" id="chat">
+    <div className='h-100 bg-light'>
+      <div className='h-100'>
+        <div
+          className='h-100'
+          id='chat'>
           <div className='d-flex flex-column h-100'>
-            <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-              <div className="container">
+            <nav className='shadow-sm navbar navbar-expand-lg navbar-light bg-white'>
+              <div className='container'>
                 <Link
-                  className="navbar-brand"
-                  to="/"
-                >
+                  className='navbar-brand'
+                  to='/'>
                   {t('mainHeader.hexletChat')}
                 </Link>
               </div>
@@ -90,17 +91,18 @@ const LoginPage = () => {
                   <div className='card shadow-sm'>
                     <div className='card-body row p-5'>
                       <div className='col-12 col-md-6 d-flex align-items-center justify-content-center'>
-                        <img 
+                        <img
                           src={avatar}
-                          className="rounded-circle" 
-                          alt="Войти"
+                          className='rounded-circle'
+                          alt='Войти'
                         />
                       </div>
                       <Form
                         onSubmit={formik.handleSubmit}
-                        className='col-12 col-md-6 mt-3 mt-md-0'
-                      >
-                        <h1 className='text-center mb-4'>{t('loginPage.header')}</h1>
+                        className='col-12 col-md-6 mt-3 mt-md-0'>
+                        <h1 className='text-center mb-4'>
+                          {t('loginPage.header')}
+                        </h1>
                         <fieldset>
                           <Form.Group className='form-floating mb-3'>
                             <Form.Control
@@ -114,7 +116,9 @@ const LoginPage = () => {
                               required
                               ref={inputRef}
                             />
-                            <Form.Label htmlFor='username'>{t('loginPage.username')}</Form.Label>
+                            <Form.Label htmlFor='username'>
+                              {t('loginPage.username')}
+                            </Form.Label>
                           </Form.Group>
                           <Form.Group className='form-floating mb-4'>
                             <Form.Control
@@ -128,7 +132,9 @@ const LoginPage = () => {
                               isInvalid={authFailed}
                               required
                             />
-                            <Form.Label htmlFor='password'>{t('loginPage.password')}</Form.Label>
+                            <Form.Label htmlFor='password'>
+                              {t('loginPage.password')}
+                            </Form.Label>
                             <Form.Control.Feedback type='invalid'>
                               {t('loginPage.invalidPassword')}
                             </Form.Control.Feedback>
@@ -136,21 +142,25 @@ const LoginPage = () => {
                           <Button
                             className='w-100 mb-3 btn btn-outline-primary'
                             type='submit'
-                            variant='outline-primary'
-                          >
+                            variant='outline-primary'>
                             {t('loginPage.submit')}
                           </Button>
                         </fieldset>
                       </Form>
                     </div>
                     <div className='card-footer p-4 d-flex align-items-center justify-content-center'>
-                      <div className="text-center">
-                        <Trans 
-                          i18nKey="loginPage.noSignUpWithLink"
+                      <div className='text-center'>
+                        <Trans
+                          i18nKey='loginPage.noSignUpWithLink'
                           components={{
-                            1: <Link to="/signup" className="text-decoration-none" />
+                            1: (
+                              <Link
+                                to='/signup'
+                                className='text-decoration-none'
+                              />
+                            ),
                           }}
-                        />                      
+                        />
                       </div>
                     </div>
                   </div>

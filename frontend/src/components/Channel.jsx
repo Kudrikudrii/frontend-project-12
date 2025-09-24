@@ -13,53 +13,47 @@ const Channel = ({ channel, handleClick, currentChannelId, defaultChannelId }) =
 
   return (
     <li className='nav-item w-100'>
-      <div className="d-flex dropdown btn-group">
+      <div className='d-flex dropdown btn-group'>
         <Button
           variant={isActive ? 'secondary' : ''}
           className='w-100 rounded-0 text-start btn'
-          onClick={() => handleClick(channel.id)}
-        >
+          onClick={() => handleClick(channel.id)}>
           <span className='me-1'>#</span>
           {channel.name}
         </Button>
 
         {isRemovable && (
-            <Dropdown>
-              <Dropdown.Toggle
-                split
-                variant={isActive ? 'primary' : ''}
-                className="flex-grow-0 rounded-0 dropdown-toggle dropdown-toggle-split btn"
-              >
-                <span className="visually-hidden">{t('chat.channelMenu.dropdownEl')}</span>
-              </Dropdown.Toggle>
+          <Dropdown>
+            <Dropdown.Toggle
+              split
+              variant={isActive ? 'primary' : ''}
+              className='flex-grow-0 rounded-0 dropdown-toggle dropdown-toggle-split btn'>
+              <span className='visually-hidden'>{t('chat.channelMenu.dropdownEl')}</span>
+            </Dropdown.Toggle>
 
-              <Dropdown.Menu>
-                <Dropdown.Item onClick={() => setShowRenameModal(true)}>
-                  {t('chat.channelMenu.renameBtn')}
-                </Dropdown.Item>
-                <Dropdown.Item onClick={() => setShowRemoveModal(true)}>
-                  {t('chat.channelMenu.removeBtn')}
-                </Dropdown.Item>
-              </Dropdown.Menu>
-            </Dropdown>
-          )}
+            <Dropdown.Menu>
+              <Dropdown.Item onClick={() => setShowRenameModal(true)}>{t('chat.channelMenu.renameBtn')}</Dropdown.Item>
+              <Dropdown.Item onClick={() => setShowRemoveModal(true)}>{t('chat.channelMenu.removeBtn')}</Dropdown.Item>
+            </Dropdown.Menu>
+          </Dropdown>
+        )}
 
-          <RenameChannelModal
-            show={showRenameModal}
-            onClose={() => setShowRenameModal(false)}
-            channelId={channel.id}
-            currentName={channel.name}
-          />
+        <RenameChannelModal
+          show={showRenameModal}
+          onClose={() => setShowRenameModal(false)}
+          channelId={channel.id}
+          currentName={channel.name}
+        />
 
-          <RemoveChannelModal
-            show={showRemoveModal}
-            onClose={() => setShowRemoveModal(false)}
-            channelId={channel.id}
-            defaultChannelId={defaultChannelId}
-            currentChannelId={currentChannelId}
-            handleSwitchChannel={handleClick}
-          />
-      </div>      
+        <RemoveChannelModal
+          show={showRemoveModal}
+          onClose={() => setShowRemoveModal(false)}
+          channelId={channel.id}
+          defaultChannelId={defaultChannelId}
+          currentChannelId={currentChannelId}
+          handleSwitchChannel={handleClick}
+        />
+      </div>
     </li>
   );
 };

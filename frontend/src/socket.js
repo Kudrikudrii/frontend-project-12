@@ -4,8 +4,8 @@ const socket = io('', {
   path: '/socket.io',
   autoConnect: false,
   auth: {
-    token: localStorage.getItem('token')
-  }
+    token: localStorage.getItem('token'),
+  },
 });
 
 if (localStorage.getItem('token')) {

@@ -15,14 +15,13 @@ const slice = createSlice({
     addMessage: (state, { payload }) => {
       const filteredMessage = {
         ...payload,
-        body: leoProfanity.clean(payload.body)
+        body: leoProfanity.clean(payload.body),
       };
       state.messages.push(filteredMessage);
     },
     removeMessages: (state, { payload }) => {
-      state.messages = state.messages.filter(m => m.channelId !== payload.id);
+      state.messages = state.messages.filter((m) => m.channelId !== payload.id);
     },
-
   },
 });
 

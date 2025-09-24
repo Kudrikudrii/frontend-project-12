@@ -64,7 +64,7 @@ const SignUpForm = () => {
           localStorage.setItem('token', token);
           localStorage.setItem('username', username);
           navigate('/');
-        } 
+        }
       } catch (error) {
         console.error('Ошибка при создании аккаунта:', error);
         rollbar.error('Ошибка при создании аккаунта:', error, {
@@ -73,25 +73,28 @@ const SignUpForm = () => {
           timestamp: new Date().toISOString(),
           username: values.username,
           component: 'SignUpForm',
-          action: formik
+          action: formik,
         });
         if (error.status === 'FETCH_ERROR') {
-          toast.error(t('toast.fetchError'))
+          toast.error(t('toast.fetchError'));
         }
       }
     },
   });
 
   return (
-    <div className="h-100 bg-light">
-      <div className="h-100">
-        <div className="h-100" id="chat"> 
+    <div className='h-100 bg-light'>
+      <div className='h-100'>
+        <div
+          className='h-100'
+          id='chat'>
           <div className='d-flex flex-column h-100'>
-            <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
-              <div className="container">
-                <Link 
-                  className="navbar-brand"
-                  to="/">{t('mainHeader.hexletChat')}
+            <nav className='shadow-sm navbar navbar-expand-lg navbar-light bg-white'>
+              <div className='container'>
+                <Link
+                  className='navbar-brand'
+                  to='/'>
+                  {t('mainHeader.hexletChat')}
                 </Link>
               </div>
             </nav>
@@ -101,17 +104,18 @@ const SignUpForm = () => {
                   <div className='card shadow-sm'>
                     <div className='card-body row p-5'>
                       <div className='col-12 col-md-6 d-flex align-items-center justify-content-center'>
-                        <img 
+                        <img
                           src={avatar}
-                          className="rounded-circle img-fluid" 
-                          alt="Регистрация" 
+                          className='rounded-circle img-fluid'
+                          alt='Регистрация'
                         />
                       </div>
                       <Form
                         onSubmit={formik.handleSubmit}
-                        className='col-12 col-md-6 mt-3 mt-md-0'
-                      >
-                        <h1 className='text-center mb-4'>{t('signup.header')}</h1>
+                        className='col-12 col-md-6 mt-3 mt-md-0'>
+                        <h1 className='text-center mb-4'>
+                          {t('signup.header')}
+                        </h1>
                         <fieldset>
                           <Form.Group className='form-floating mb-3'>
                             <Form.Control
@@ -122,12 +126,18 @@ const SignUpForm = () => {
                               name='username'
                               id='username'
                               autoComplete='username'
-                              isInvalid={(formik.touched.username && !!formik.errors.username) || signupFailed}
+                              isInvalid={
+                                (formik.touched.username &&
+                                  !!formik.errors.username) ||
+                                signupFailed
+                              }
                               required
                               ref={inputRef}
                             />
-                            <Form.Label htmlFor='username'>{t('signup.username')}</Form.Label>
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Label htmlFor='username'>
+                              {t('signup.username')}
+                            </Form.Label>
+                            <Form.Control.Feedback type='invalid'>
                               {formik.errors.username}
                             </Form.Control.Feedback>
                           </Form.Group>
@@ -142,11 +152,17 @@ const SignUpForm = () => {
                               name='password'
                               id='password'
                               autoComplete='new-password'
-                              isInvalid={(formik.touched.password && !!formik.errors.password) || signupFailed}
+                              isInvalid={
+                                (formik.touched.password &&
+                                  !!formik.errors.password) ||
+                                signupFailed
+                              }
                               required
                             />
-                            <Form.Label htmlFor='password'>{t('signup.password')}</Form.Label>
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Label htmlFor='password'>
+                              {t('signup.password')}
+                            </Form.Label>
+                            <Form.Control.Feedback type='invalid'>
                               {formik.errors.password}
                             </Form.Control.Feedback>
                           </Form.Group>
@@ -161,11 +177,17 @@ const SignUpForm = () => {
                               name='confirmPassword'
                               id='confirmPassword'
                               autoComplete='new-password'
-                              isInvalid={(formik.touched.confirmPassword && !!formik.errors.confirmPassword) || signupFailed}
+                              isInvalid={
+                                (formik.touched.confirmPassword &&
+                                  !!formik.errors.confirmPassword) ||
+                                signupFailed
+                              }
                               required
                             />
-                            <Form.Label htmlFor='confirmPassword'>{t('signup.confirmPassword')}</Form.Label>
-                            <Form.Control.Feedback type="invalid">
+                            <Form.Label htmlFor='confirmPassword'>
+                              {t('signup.confirmPassword')}
+                            </Form.Label>
+                            <Form.Control.Feedback type='invalid'>
                               {formik.errors.confirmPassword}
                             </Form.Control.Feedback>
                           </Form.Group>
@@ -174,8 +196,7 @@ const SignUpForm = () => {
                             className='w-100 mb-3 btn btn-outline-primary'
                             type='submit'
                             variant='outline-primary'
-                            disabled={formik.isSubmitting}
-                          >
+                            disabled={formik.isSubmitting}>
                             {t('signup.submit')}
                           </Button>
                         </fieldset>

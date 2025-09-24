@@ -23,8 +23,8 @@ const AddChannelModal = ({ show, onClose }) => {
     }
   }, [show]);
 
-  const channels = useSelector((state) => state.channels.channels)
-  const existingChannelNames = channels.map(channel => channel.name.toLowerCase());
+  const channels = useSelector((state) => state.channels.channels);
+  const existingChannelNames = channels.map((channel) => channel.name.toLowerCase());
 
   const formik = useFormik({
     initialValues: {
@@ -35,10 +35,7 @@ const AddChannelModal = ({ show, onClose }) => {
         .required(t('modal.error.required'))
         .min(3, t('modal.error.length'))
         .max(30, t('modal.error.length'))
-        .test(
-          t('modal.error.notOneOf'),
-          (value) => !existingChannelNames.includes(value.toLowerCase())
-        )
+        .test(t('modal.error.notOneOf'), (value) => !existingChannelNames.includes(value.toLowerCase())),
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
@@ -47,7 +44,7 @@ const AddChannelModal = ({ show, onClose }) => {
           name: filteredChannelName,
         };
         await axios.post(routes.channelsPath(), newChannel, {
-          headers: getAuthToken() // { id: '3', name: 'new name channel', removable: true }
+          headers: getAuthToken(), // { id: '3', name: 'new name channel', removable: true }
         });
         toast.success(t('toast.createdChannel'));
         resetForm();
@@ -58,10 +55,10 @@ const AddChannelModal = ({ show, onClose }) => {
           endpoint: routes.channelsPath(),
           method: 'POST',
           timestamp: new Date().toISOString(),
-          component: 'AddChannelModal'
+          component: 'AddChannelModal',
         });
         if (error.status === 'FETCH_ERROR') {
-          toast.error(t('toast.fetchError'))
+          toast.error(t('toast.fetchError'));
         }
         if (error.response?.status === 409) {
           formik.setFieldError(t('modal.error.notOneOf'));
@@ -73,17 +70,24 @@ const AddChannelModal = ({ show, onClose }) => {
   });
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal
+      show={show}
+      onHide={onClose}
+      centered>
       <Modal.Header closeButton>
         <Modal.Title>{t('modal.addChannel.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={formik.handleSubmit} noValidate>
-          <Form.Group controlId="name" className="mb-3">
+        <Form
+          onSubmit={formik.handleSubmit}
+          noValidate>
+          <Form.Group
+            controlId='name'
+            className='mb-3'>
             <Form.Label visuallyHidden>{t('modal.addChannel.label')}</Form.Label>
             <Form.Control
-              type="text"
-              name="name"
+              type='text'
+              name='name'
               placeholder={t('modal.addChannel.placeholder')}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
@@ -91,25 +95,19 @@ const AddChannelModal = ({ show, onClose }) => {
               isInvalid={formik.touched.name && !!formik.errors.name}
               ref={inputRef}
             />
-            {formik.touched.name && formik.errors.name ? (
-              <Form.Control.Feedback type="invalid">
-                {formik.errors.name}
-              </Form.Control.Feedback>
-            ) : null}
+            {formik.touched.name && formik.errors.name ? <Form.Control.Feedback type='invalid'>{formik.errors.name}</Form.Control.Feedback> : null}
           </Form.Group>
-          <div className="d-flex justify-content-end">
-            <Button 
-              variant="secondary" 
-              onClick={onClose} 
-              className="me-2"
-            >
+          <div className='d-flex justify-content-end'>
+            <Button
+              variant='secondary'
+              onClick={onClose}
+              className='me-2'>
               {t('modal.cancelBtn')}
             </Button>
-            <Button 
-              variant="primary" 
-              type="submit"
-              disabled={formik.isSubmitting || !formik.values.name}
-            >
+            <Button
+              variant='primary'
+              type='submit'
+              disabled={formik.isSubmitting || !formik.values.name}>
               {t('modal.addChannel.createBtn')}
             </Button>
           </div>

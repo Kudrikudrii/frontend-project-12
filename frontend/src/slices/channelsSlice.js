@@ -6,7 +6,7 @@ const initialState = {
 };
 
 const slice = createSlice({
-  name: 'channels', 
+  name: 'channels',
   initialState,
   reducers: {
     setChannels: (state, { payload }) => {
@@ -15,20 +15,21 @@ const slice = createSlice({
     addChannel: (state, { payload }) => {
       const filteredChannel = {
         ...payload,
-        name: leoProfanity.clean(payload.name)
+        name: leoProfanity.clean(payload.name),
       };
-      state.channels.push(filteredChannel);// { id: '3', name: 'new name channel', removable: true }
+      state.channels.push(filteredChannel); // { id: '3', name: 'new name channel', removable: true }
     },
     renameChannel: (state, { payload }) => {
-      const channel = state.channels.find(c => c.id === payload.id);
+      const channel = state.channels.find((c) => c.id === payload.id);
       if (channel) channel.name = payload.name;
     },
     removeChannel: (state, { payload }) => {
-      state.channels = state.channels.filter(c => c.id !== payload.id);
+      state.channels = state.channels.filter((c) => c.id !== payload.id);
     },
   },
 });
 
-export const { setChannels, addChannel, renameChannel, removeChannel } = slice.actions;
+export const { setChannels, addChannel, renameChannel, removeChannel } =
+  slice.actions;
 
 export default slice.reducer;
