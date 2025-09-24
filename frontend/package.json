@@ -5,9 +5,9 @@
   "type": "module",
   "scripts": {
     "dev": "vite",
-    "start": "npx start-server -s ./dist",
     "build": "vite build",
-    "serve": "vite preview"
+    "lint": "eslint .",
+    "preview": "vite preview"
   },
   "dependencies": {
     "@reduxjs/toolkit": "^2.8.2",
