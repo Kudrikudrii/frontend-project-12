@@ -54,14 +54,15 @@ const MessageForm = ({ currentChannelId, username }) => {
     <form
       onSubmit={formik.handleSubmit}
       noValidate
-      className='py-1 border rounded-2'>
+      className='py-1 border rounded-2'
+      aria-label={t('chat.messageForm.formLabel')}>
       <div className='input-group has-validation'>
         <input
           id='body'
           name='body'
           type='text'
-          aria-label='Новое сообщение'
           placeholder={t('chat.messageForm.placeholder')}
+          aria-label={t('chat.messageForm.placeholder')}
           className='border-0 p-0 ps-2 form-control'
           onChange={formik.handleChange}
           value={formik.values.body}
@@ -70,7 +71,8 @@ const MessageForm = ({ currentChannelId, username }) => {
         <button
           type='submit'
           disabled={!formik.values.body}
-          className='btn btn-group-vertical'>
+          className='btn btn-group-vertical'
+          aria-label={t('chat.messageForm.submit')}>
           <svg
             xmlns='http://www.w3.org/2000/svg'
             viewBox='0 0 16 16'

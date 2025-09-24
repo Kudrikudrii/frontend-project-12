@@ -29,7 +29,8 @@ export default {
     },
     notFoundPage: {
       title: 'Страница не найдена',
-      toMainPage: 'Но вы можете перейти <homeLink>на главную страницу</homeLink>',
+      toMainPage:
+        'Но вы можете перейти <homeLink>на главную страницу</homeLink>',
     },
     chat: {
       channels: 'Каналы',
@@ -47,6 +48,7 @@ export default {
       messageForm: {
         submit: 'Отправить',
         placeholder: 'Введите сообщение...',
+        formLabel: 'Форма отправки сообщения',
       },
     },
     modal: {
