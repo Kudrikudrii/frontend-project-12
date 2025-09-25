@@ -68,6 +68,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
             <Form.Control
               type='text'
               name='name'
+              aria-label={t('modal.renameChannel.title')}
               value={formik.values.name}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
