@@ -25,7 +25,7 @@ const AddChannelModal = ({ show, onClose }) => {
   const englishBadWords = [
       'shit', 'fuck', 'asshole', 'bitch', 'damn', 'cunt', 'dick', 'piss',
       'bastard', 'slut', 'whore', 'cock', 'pussy', 'faggot', 'nigger',
-      'ass', 'bullshit', 'dammit', 'hell', 'sex', 'penis', 'vagina'
+      'ass', 'bullshit', 'dammit', 'hell', 'sex', 'penis', 'vagina', 'boobs'
     ];
     
     leoProfanity.add(englishBadWords);
