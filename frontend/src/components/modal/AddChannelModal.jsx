@@ -22,6 +22,14 @@ const AddChannelModal = ({ show, onClose }) => {
     channel.name.toLowerCase()
   );
 
+  const englishBadWords = [
+      'shit', 'fuck', 'asshole', 'bitch', 'damn', 'cunt', 'dick', 'piss',
+      'bastard', 'slut', 'whore', 'cock', 'pussy', 'faggot', 'nigger',
+      'ass', 'bullshit', 'dammit', 'hell', 'sex', 'penis', 'vagina'
+    ];
+    
+    leoProfanity.add(englishBadWords);
+
   useEffect(() => {
     if (show) {
       inputRef.current?.focus();
@@ -40,17 +48,13 @@ const AddChannelModal = ({ show, onClose }) => {
         .test(
           t('modal.error.notOneOf'),
           (value) => !existingChannelNames.includes(value.toLowerCase())
-        )
-        .test(
-          'no-profanity',
-          t('modal.error.profanity'),
-          (value) => !leoProfanity.check(value || '')
         ),
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
+        const filteredChannelName = leoProfanity.clean(values.name);
         const newChannel = {
-          name: values.name,
+          name: filteredChannelName, // Отправляем очищенное имя
         };
         await axios.post(routes.channelsPath(), newChannel, {
           headers: getAuthToken(), // { id: '3', name: 'new name channel', removable: true }
