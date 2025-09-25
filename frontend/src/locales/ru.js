@@ -57,6 +57,7 @@ export default {
         required: "Обязательное поле",
         length: "От 3 до 20 символов",
         notOneOf: "Канал с таким именем уже существует",
+        profanity: "Недопустимое название",
       },
       addChannel: {
         title: "Добавить канал",

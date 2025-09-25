@@ -1,15 +1,15 @@
-import { useFormik } from "formik";
-import axios from "axios";
-import { useEffect, useRef } from "react";
-import { Modal, Button, Form } from "react-bootstrap";
-import getAuthToken from "../../getAuthToken";
-import routes from "../../routes";
-import * as Yup from "yup";
-import { useTranslation } from "react-i18next";
-import leoProfanity from "leo-profanity";
-import { useRollbar } from "@rollbar/react";
-import { toast } from "react-toastify";
-import { useSelector } from "react-redux";
+import { useFormik } from 'formik';
+import axios from 'axios';
+import { useEffect, useRef } from 'react';
+import { Modal, Button, Form } from 'react-bootstrap';
+import getAuthToken from '../../getAuthToken';
+import routes from '../../routes';
+import * as Yup from 'yup';
+import { useTranslation } from 'react-i18next';
+import leoProfanity from 'leo-profanity';
+import { useRollbar } from '@rollbar/react';
+import { toast } from 'react-toastify';
+import { useSelector } from 'react-redux';
 
 const AddChannelModal = ({ show, onClose }) => {
   const { t } = useTranslation();
@@ -17,56 +17,60 @@ const AddChannelModal = ({ show, onClose }) => {
 
   const inputRef = useRef();
 
+  const channels = useSelector((state) => state.channels.channels);
+  const existingChannelNames = channels.map((channel) =>
+    channel.name.toLowerCase()
+  );
+
   useEffect(() => {
     if (show) {
       inputRef.current?.focus();
     }
   }, [show]);
 
-  const channels = useSelector((state) => state.channels.channels);
-  const existingChannelNames = channels.map((channel) =>
-    channel.name.toLowerCase()
-  );
-
   const formik = useFormik({
     initialValues: {
-      name: "",
+      name: '',
     },
     validationSchema: Yup.object({
       name: Yup.string()
-        .required(t("modal.error.required"))
-        .min(3, t("modal.error.length"))
-        .max(20, t("modal.error.length"))
+        .required(t('modal.error.required'))
+        .min(3, t('modal.error.length'))
+        .max(20, t('modal.error.length'))
         .test(
-          t("modal.error.notOneOf"),
+          t('modal.error.notOneOf'),
           (value) => !existingChannelNames.includes(value.toLowerCase())
+        )
+        .test(
+          'no-profanity',
+          t('modal.error.profanity'),
+          (value) => !leoProfanity.check(value || '')
         ),
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
-        const filteredChannelName = leoProfanity.clean(values.name);
         const newChannel = {
-          name: filteredChannelName,
+          name: values.name,
         };
         await axios.post(routes.channelsPath(), newChannel, {
           headers: getAuthToken(), // { id: '3', name: 'new name channel', removable: true }
         });
-        toast.success(t("toast.createdChannel"));
+        toast.success(t('toast.createdChannel'));
         resetForm();
         onClose();
       } catch (error) {
-        console.error("Ошибка при создании канала:", error);
-        rollbar.error("Ошибка при создании канала:", error, {
+        console.error('Ошибка при создании канала:', error);
+        rollbar.error('Ошибка при создании канала:', error, {
           endpoint: routes.channelsPath(),
-          method: "POST",
+          method: 'POST',
           timestamp: new Date().toISOString(),
-          component: "AddChannelModal",
+          component: 'AddChannelModal',
         });
-        if (error.status === "FETCH_ERROR") {
-          toast.error(t("toast.fetchError"));
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'));
         }
         if (error.response?.status === 409) {
-          formik.setFieldError(t("modal.error.notOneOf"));
+          formik.setFieldError('name', t('modal.error.notOneOf'));
         }
       } finally {
         setSubmitting(false);
@@ -75,20 +79,27 @@ const AddChannelModal = ({ show, onClose }) => {
   });
 
   return (
-    <Modal show={show} onHide={onClose} centered>
+    <Modal
+      show={show}
+      onHide={onClose}
+      centered>
       <Modal.Header closeButton>
-        <Modal.Title>{t("modal.addChannel.title")}</Modal.Title>
+        <Modal.Title>{t('modal.addChannel.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={formik.handleSubmit} noValidate>
-          <Form.Group controlId="name" className="mb-3">
+        <Form
+          onSubmit={formik.handleSubmit}
+          noValidate>
+          <Form.Group
+            controlId='name'
+            className='mb-3'>
             <Form.Label visuallyHidden>
-              {t("modal.addChannel.label")}
+              {t('modal.addChannel.label')}
             </Form.Label>
             <Form.Control
-              type="text"
-              name="name"
-              placeholder={t("modal.addChannel.placeholder")}
+              type='text'
+              name='name'
+              placeholder={t('modal.addChannel.placeholder')}
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               value={formik.values.name}
@@ -96,21 +107,23 @@ const AddChannelModal = ({ show, onClose }) => {
               ref={inputRef}
             />
             {formik.touched.name && formik.errors.name ? (
-              <Form.Control.Feedback type="invalid">
+              <Form.Control.Feedback type='invalid'>
                 {formik.errors.name}
               </Form.Control.Feedback>
             ) : null}
           </Form.Group>
-          <div className="d-flex justify-content-end">
-            <Button variant="secondary" onClick={onClose} className="me-2">
-              {t("modal.cancelBtn")}
+          <div className='d-flex justify-content-end'>
+            <Button
+              variant='secondary'
+              onClick={onClose}
+              className='me-2'>
+              {t('modal.cancelBtn')}
             </Button>
             <Button
-              variant="primary"
-              type="submit"
-              disabled={formik.isSubmitting || !formik.values.name}
-            >
-              {t("modal.addChannel.createBtn")}
+              variant='primary'
+              type='submit'
+              disabled={formik.isSubmitting || !formik.values.name}>
+              {t('modal.addChannel.createBtn')}
             </Button>
           </div>
         </Form>
