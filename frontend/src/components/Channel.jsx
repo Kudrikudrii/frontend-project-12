@@ -24,6 +24,7 @@ const Channel = ({
           className="w-100 rounded-0 text-start btn"
           onClick={() => handleClick(channel.id)}
           aria-label={`Канал ${channel.name}`}
+          name={channel.name}
         >
           <span className="me-1">#</span>
           {channel.name}
