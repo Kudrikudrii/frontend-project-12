@@ -1,10 +1,15 @@
-import { Button, Dropdown } from 'react-bootstrap';
-import { useState } from 'react';
-import RemoveChannelModal from './modal/RemoveChannelModal';
-import RenameChannelModal from './modal/RenameChannelModal';
-import { useTranslation } from 'react-i18next';
+import { Button, Dropdown } from "react-bootstrap";
+import { useState } from "react";
+import RemoveChannelModal from "./modal/RemoveChannelModal";
+import RenameChannelModal from "./modal/RenameChannelModal";
+import { useTranslation } from "react-i18next";
 
-const Channel = ({ channel, handleClick, currentChannelId, defaultChannelId }) => {
+const Channel = ({
+  channel,
+  handleClick,
+  currentChannelId,
+  defaultChannelId,
+}) => {
   const [showRenameModal, setShowRenameModal] = useState(false);
   const [showRemoveModal, setShowRemoveModal] = useState(false);
   const isActive = channel.id === currentChannelId;
@@ -12,13 +17,15 @@ const Channel = ({ channel, handleClick, currentChannelId, defaultChannelId }) =
   const { t } = useTranslation();
 
   return (
-    <li className='nav-item w-100'>
-      <div className='d-flex dropdown btn-group'>
+    <li className="nav-item w-100">
+      <div className="d-flex dropdown btn-group">
         <Button
-          variant={isActive ? 'secondary' : ''}
-          className='w-100 rounded-0 text-start btn'
-          onClick={() => handleClick(channel.id)}>
-          <span className='me-1'>#</span>
+          variant={isActive ? "secondary" : ""}
+          className="w-100 rounded-0 text-start btn"
+          onClick={() => handleClick(channel.id)}
+          aria-label={`Канал ${channel.name}`}
+        >
+          <span className="me-1">#</span>
           {channel.name}
         </Button>
 
@@ -26,14 +33,21 @@ const Channel = ({ channel, handleClick, currentChannelId, defaultChannelId }) =
           <Dropdown>
             <Dropdown.Toggle
               split
-              variant={isActive ? 'primary' : ''}
-              className='flex-grow-0 rounded-0 dropdown-toggle dropdown-toggle-split btn'>
-              <span className='visually-hidden'>{t('chat.channelMenu.dropdownEl')}</span>
+              variant={isActive ? "primary" : ""}
+              className="flex-grow-0 rounded-0 dropdown-toggle dropdown-toggle-split btn"
+            >
+              <span className="visually-hidden">
+                {t("chat.channelMenu.dropdownEl")}
+              </span>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
-              <Dropdown.Item onClick={() => setShowRenameModal(true)}>{t('chat.channelMenu.renameBtn')}</Dropdown.Item>
-              <Dropdown.Item onClick={() => setShowRemoveModal(true)}>{t('chat.channelMenu.removeBtn')}</Dropdown.Item>
+              <Dropdown.Item onClick={() => setShowRenameModal(true)}>
+                {t("chat.channelMenu.renameBtn")}
+              </Dropdown.Item>
+              <Dropdown.Item onClick={() => setShowRemoveModal(true)}>
+                {t("chat.channelMenu.removeBtn")}
+              </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
         )}
