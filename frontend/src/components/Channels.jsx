@@ -10,7 +10,7 @@ import { useRollbar } from '@rollbar/react'
 
 const Channels = ({ currentChannelId, handleClick, defaultChannelId }) => {
   const dispatch = useDispatch()
-  const channels = useSelector((state) => state.channels.channels)
+  const channels = useSelector(state => state.channels.channels)
   const [showModal, setShowModal] = useState(false)
   const { t } = useTranslation()
   const rollbar = useRollbar()
