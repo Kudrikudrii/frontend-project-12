@@ -22,9 +22,8 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
     channel.name.toLowerCase(),
   )
 
-  const englishBadWords = ['boobs']
-
-  leoProfanity.add(englishBadWords)
+  // const englishBadWords = ['boobs'] 
+  // leoProfanity.add(englishBadWords)
 
   useEffect(() => {
     if (show) {
