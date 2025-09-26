@@ -169,7 +169,7 @@ const SignUpForm = () => {
                               id="password"
                               autoComplete="new-password"
                               isInvalid={
-                                (formik.touched.password 
+                                (formik.touched.password
                                   && !!formik.errors.password)
                                 || signupFailed
                               }

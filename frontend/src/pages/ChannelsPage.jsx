@@ -19,7 +19,7 @@ const ChannelsPage = () => {
   const rollbar = useRollbar()
   const [currentChannelId, setCurrentChannelId] = useState('')
   const defaultChannelId = useSelector(
-    (state) => state.channels.channels.find((c) => c.name === 'general')?.id || '1',
+    state => state.channels.channels.find(c => c.name === 'general')?.id || '1',
   )
 
   const handleChannelClick = useCallback((channelId) => {

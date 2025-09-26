@@ -19,7 +19,8 @@ const Channels = ({ currentChannelId, handleClick, defaultChannelId }) => {
     const handleNewChannel = (channel) => {
       try {
         dispatch(addChannel(channel)) // { id: '3', name: 'new name channel', removable: true }
-      } catch (error) {
+      }
+      catch (error) {
         rollbar.error('Ошибка при создании канала', error, {
           channelData: channel,
           component: 'Channels',
@@ -35,7 +36,8 @@ const Channels = ({ currentChannelId, handleClick, defaultChannelId }) => {
         if (currentChannelId === id) {
           handleClick(defaultChannelId)
         }
-      } catch (error) {
+      }
+      catch (error) {
         rollbar.error('Ошибка при удалении канала', error, {
           channelId: id,
           component: 'Channels',
@@ -85,7 +87,7 @@ const Channels = ({ currentChannelId, handleClick, defaultChannelId }) => {
         id="channels-box"
         className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
       >
-        {channels.map((channel) => (
+        {channels.map(channel => (
           <Channel
             key={channel.id}
             channel={channel}
