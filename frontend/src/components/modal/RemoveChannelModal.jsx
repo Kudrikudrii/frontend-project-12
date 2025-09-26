@@ -28,7 +28,8 @@ const RemoveChannelModal = ({
         handleSwitchChannel(defaultChannelId)
       }
       onClose()
-    } catch (error) {
+    }
+    catch (error) {
       console.error('Ошибка при удалении канала:', error)
       rollbar.error('Ошибка при удалении канала:', error, {
         endpoint: routes.channelsPath(channelId),

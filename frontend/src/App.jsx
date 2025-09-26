@@ -23,14 +23,7 @@ const App = () => {
       <I18nextProvider i18n={i18next}>
         <BrowserRouter>
           <Routes>
-            <Route
-              path="/"
-              element={
-                <RequireAuth>
-                  <ChannelsPage />
-                </RequireAuth>
-              }
-            />
+            <Route path="/" element={<RequireAuth><ChannelsPage /></RequireAuth>} />
             <Route
               path="/login"
               element={<LoginForm />}

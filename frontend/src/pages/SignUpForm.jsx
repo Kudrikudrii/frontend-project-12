@@ -45,7 +45,7 @@ const SignUpForm = () => {
       confirmPassword: '',
     },
     validationSchema,
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       setSignupFailed(false)
       try {
         const response = await axios.post(routes.newUserPath(), {
@@ -59,13 +59,14 @@ const SignUpForm = () => {
             setCredentials({
               username,
               token,
-            })
+            }),
           )
           localStorage.setItem('token', token)
           localStorage.setItem('username', username)
           navigate('/')
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Ошибка при создании аккаунта:', error)
         rollbar.error('Ошибка при создании аккаунта:', error, {
           endpoint: routes.newUserPath(),
@@ -78,7 +79,8 @@ const SignUpForm = () => {
         if (error.response?.status === 409) {
           setSignupFailed(true)
           toast.error(t('signup.feedbacks.uniqueUser'))
-        } else if (error.status === 'FETCH_ERROR') {
+        }
+        else if (error.status === 'FETCH_ERROR') {
           toast.error(t('toast.fetchError'))
         }
       }
@@ -141,9 +143,9 @@ const SignUpForm = () => {
                               id="username"
                               autoComplete="username"
                               isInvalid={
-                                (formik.touched.username &&
-                                  !!formik.errors.username) ||
-                                signupFailed
+                                (formik.touched.username
+                                  && !!formik.errors.username)
+                                || signupFailed
                               }
                               required
                               ref={inputRef}
@@ -167,9 +169,9 @@ const SignUpForm = () => {
                               id="password"
                               autoComplete="new-password"
                               isInvalid={
-                                (formik.touched.password &&
-                                  !!formik.errors.password) ||
-                                signupFailed
+                                (formik.touched.password 
+                                  && !!formik.errors.password)
+                                || signupFailed
                               }
                               required
                             />
@@ -192,9 +194,9 @@ const SignUpForm = () => {
                               id="confirmPassword"
                               autoComplete="new-password"
                               isInvalid={
-                                (formik.touched.confirmPassword &&
-                                  !!formik.errors.confirmPassword) ||
-                                signupFailed
+                                (formik.touched.confirmPassword
+                                  && !!formik.errors.confirmPassword)
+                                || signupFailed
                               }
                               required
                             />

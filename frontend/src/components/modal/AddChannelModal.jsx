@@ -19,7 +19,7 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
 
   const channels = useSelector(state => state.channels.channels)
   const existingChannelNames = channels.map(channel =>
-    channel.name.toLowerCase()
+    channel.name.toLowerCase(),
   )
 
   const englishBadWords = ['boobs']
@@ -43,7 +43,7 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
         .max(20, t('modal.error.length'))
         .test(
           t('modal.error.notOneOf'),
-          value => !existingChannelNames.includes(value.toLowerCase())
+          value => !existingChannelNames.includes(value.toLowerCase()),
         ),
     }),
     onSubmit: async (values, { setSubmitting, resetForm }) => {
@@ -62,7 +62,8 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
         if (onChannelCreated && response.data) {
           onChannelCreated(response.data.id)
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Ошибка при создании канала:', error)
         rollbar.error('Ошибка при создании канала:', error, {
           endpoint: routes.channelsPath(),
@@ -76,7 +77,8 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
         if (error.response?.status === 409) {
           formik.setFieldError('name', t('modal.error.notOneOf'))
         }
-      } finally {
+      }
+      finally {
         setSubmitting(false)
       }
     },
@@ -113,11 +115,11 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
               isInvalid={formik.touched.name && !!formik.errors.name}
               ref={inputRef}
             />
-            {formik.touched.name && formik.errors.name ? (
+            {formik.touched.name && formik.errors.name && (
               <Form.Control.Feedback type="invalid">
                 {formik.errors.name}
               </Form.Control.Feedback>
-            ) : null}
+            )}
           </Form.Group>
           <div className="d-flex justify-content-end">
             <Button

@@ -10,13 +10,13 @@ import { useRollbar } from '@rollbar/react'
 
 const Channels = ({ currentChannelId, handleClick, defaultChannelId }) => {
   const dispatch = useDispatch()
-  const channels = useSelector(state => state.channels.channels)
+  const channels = useSelector((state) => state.channels.channels)
   const [showModal, setShowModal] = useState(false)
   const { t } = useTranslation()
   const rollbar = useRollbar()
 
   useEffect(() => {
-    const handleNewChannel = channel => {
+    const handleNewChannel = (channel) => {
       try {
         dispatch(addChannel(channel)) // { id: '3', name: 'new name channel', removable: true }
       } catch (error) {
@@ -85,7 +85,7 @@ const Channels = ({ currentChannelId, handleClick, defaultChannelId }) => {
         id="channels-box"
         className="nav flex-column nav-pills nav-fill px-2 mb-3 overflow-auto h-100 d-block"
       >
-        {channels.map(channel => (
+        {channels.map((channel) => (
           <Channel
             key={channel.id}
             channel={channel}

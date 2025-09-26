@@ -17,10 +17,11 @@ const Messages = ({ currentChannelId }) => {
   const rollbar = useRollbar()
 
   useEffect(() => {
-    const handleNewMessage = message => {
+    const handleNewMessage = (message) => {
       try {
         dispatch(addMessage(message))
-      } catch (error) {
+      }
+      catch (error) {
         rollbar.error('Ошибка при отправке сообщения', error, {
           channelData: message,
           component: 'Messages',
@@ -37,10 +38,10 @@ const Messages = ({ currentChannelId }) => {
   }, [dispatch, rollbar])
 
   const channelMessages = messages.filter(
-    message => message.channelId === currentChannelId
+    message => message.channelId === currentChannelId,
   )
   const activeChannelData = channels.find(
-    channel => channel.id === currentChannelId
+    channel => channel.id === currentChannelId,
   )
 
   if (!activeChannelData) {

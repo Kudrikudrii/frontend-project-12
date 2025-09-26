@@ -21,7 +21,7 @@ const MessageForm = ({ currentChannelId, username }) => {
     initialValues: {
       body: '',
     },
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       const filteredMessage = leoProfanity.clean(values.body)
       const newMessage = {
         body: filteredMessage,
@@ -34,7 +34,8 @@ const MessageForm = ({ currentChannelId, username }) => {
         })
         formik.resetForm()
         inputRef.current.focus()
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Ошибка при отправке сообщения:', error)
         rollbar.error('Ошибка при отправке сообщения:', error, {
           endpoint: routes.messagesPath(),

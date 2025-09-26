@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next'
 const ActiveChannel = ({ channelName, messagesCount }) => {
   const { t } = useTranslation()
 
-  const getPluralForm = count => {
+  const getPluralForm = (count) => {
     const lastDigit = count % 10
     const lastTwoDigits = count % 100
 
@@ -11,11 +11,9 @@ const ActiveChannel = ({ channelName, messagesCount }) => {
       return 'messagesCount_0'
     }
 
-    if (
-      lastDigit >= 2 &&
-      lastDigit <= 4 &&
-      (lastTwoDigits < 10 || lastTwoDigits >= 20)
-    ) {
+    if (lastDigit >= 2
+      && lastDigit <= 4
+      && (lastTwoDigits < 10 || lastTwoDigits >= 20)) {
       return 'messagesCount_1'
     }
 
@@ -27,7 +25,11 @@ const ActiveChannel = ({ channelName, messagesCount }) => {
   return (
     <div className="bg-light mb-4 p-3 shadow-sm small">
       <p className="m-0">
-        <b># {channelName}</b>
+        <b>
+          # 
+          {' '}
+          {channelName}
+        </b>
       </p>
       <span className="text-muted">
         {t(`chat.${pluralKey}`, { count: messagesCount })}

@@ -29,7 +29,7 @@ const LoginPage = () => {
       username: '',
       password: '',
     },
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       setAuthFailed(false)
       try {
         const response = await axios.post(routes.loginPath(), values)
@@ -40,16 +40,18 @@ const LoginPage = () => {
             setCredentials({
               username,
               token,
-            })
+            }),
           )
           localStorage.setItem('token', token)
           localStorage.setItem('username', username)
           socket.connect()
           navigate('/')
-        } else {
+        }
+        else {
           setAuthFailed(true)
         }
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Ошибка при входе в аккаунт:', error)
         rollbar.error('Ошибка при входе в аккаунт:', error, {
           endpoint: routes.loginPath(),

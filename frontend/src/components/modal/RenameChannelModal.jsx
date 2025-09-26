@@ -19,7 +19,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
 
   const channels = useSelector(state => state.channels.channels)
   const existingChannelNames = channels.map(channel =>
-    channel.name.toLowerCase()
+    channel.name.toLowerCase(),
   )
 
   useEffect(() => {
@@ -39,20 +39,21 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
         .max(30, t('modal.error.length'))
         .test(
           t('modal.error.notOneOf'),
-          value => !existingChannelNames.includes(value.toLowerCase())
+          value => !existingChannelNames.includes(value.toLowerCase()),
         ),
     }),
-    onSubmit: async values => {
+    onSubmit: async (values) => {
       try {
         await axios.patch(
           routes.channelsPath(channelId),
           { name: values.name },
-          { headers: getAuthToken() }
+          { headers: getAuthToken() },
         )
         dispatch(renameChannel({ id: channelId, name: values.name }))
         toast.success(t('toast.renamedChannel'))
         onClose()
-      } catch (error) {
+      }
+      catch (error) {
         console.error('Ошибка при переименовании канала:', error)
         rollbar.error('Ошибка при переименовании канала:', error, {
           endpoint: routes.channelsPath(channelId),

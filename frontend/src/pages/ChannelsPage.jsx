@@ -19,10 +19,10 @@ const ChannelsPage = () => {
   const rollbar = useRollbar()
   const [currentChannelId, setCurrentChannelId] = useState('')
   const defaultChannelId = useSelector(
-    state => state.channels.channels.find(c => c.name === 'general')?.id || '1'
+    (state) => state.channels.channels.find((c) => c.name === 'general')?.id || '1',
   )
 
-  const handleChannelClick = useCallback(channelId => {
+  const handleChannelClick = useCallback((channelId) => {
     setCurrentChannelId(channelId)
   }, [])
 
@@ -50,7 +50,8 @@ const ChannelsPage = () => {
         if (!currentChannelId && channels.length > 0) {
           setCurrentChannelId(channels[0].id)
         }
-      } catch (error) {
+      }
+      catch (error) {
         let errorContext = {
           endpoint: `${routes.channelsPath()} and ${routes.messagesPath()}`,
           method: 'GET',
@@ -64,17 +65,17 @@ const ChannelsPage = () => {
           localStorage.removeItem('token')
           navigate('/login')
           return
-        } else if (error.response.status >= 500) {
+        }
+        else if (error.response.status >= 500) {
           rollbar.critical('Ошибка сервера', error, errorContext)
-        } else {
+        }
+        else {
           rollbar.error('Ошибка клиента', error, errorContext)
         }
 
         if (error.status === 'FETCH_ERROR') {
           toast.error(t('toast.fetchError'))
         }
-
-        console.error('Ошибка при загрузке каналов:', error)
       }
     }
 
@@ -85,7 +86,8 @@ const ChannelsPage = () => {
     try {
       localStorage.removeItem('token')
       navigate('/login')
-    } catch (error) {
+    }
+    catch (error) {
       rollbar.error('Ошибка при выходе из системы', error, {
         component: 'ChannelsPage',
         action: 'handleLogout',
