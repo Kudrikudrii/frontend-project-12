@@ -1,4 +1,4 @@
-import { io } from 'socket.io-client';
+import { io } from 'socket.io-client'
 
 const socket = io('', {
   path: '/socket.io',
@@ -6,10 +6,10 @@ const socket = io('', {
   auth: {
     token: localStorage.getItem('token'),
   },
-});
+})
 
 if (localStorage.getItem('token')) {
-  socket.connect();
+  socket.connect()
 }
 
-export default socket;
+export default socket

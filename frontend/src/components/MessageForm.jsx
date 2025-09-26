@@ -1,69 +1,69 @@
-import { useFormik } from "formik";
-import getAuthToken from "../getAuthToken";
-import axios from "axios";
-import { useRef, useEffect } from "react";
-import routes from "../routes";
-import { useTranslation } from "react-i18next";
-import leoProfanity from "leo-profanity";
-import { useRollbar } from "@rollbar/react";
-import { toast } from "react-toastify";
+import { useFormik } from 'formik'
+import getAuthToken from '../getAuthToken'
+import axios from 'axios'
+import { useRef, useEffect } from 'react'
+import routes from '../routes'
+import { useTranslation } from 'react-i18next'
+import leoProfanity from 'leo-profanity'
+import { useRollbar } from '@rollbar/react'
+import { toast } from 'react-toastify'
 
 const MessageForm = ({ currentChannelId, username }) => {
-  const { t } = useTranslation();
-  const rollbar = useRollbar();
+  const { t } = useTranslation()
+  const rollbar = useRollbar()
 
-  const inputRef = useRef();
+  const inputRef = useRef()
   useEffect(() => {
-    inputRef.current.focus();
-  }, []);
+    inputRef.current.focus()
+  }, [])
 
   const formik = useFormik({
     initialValues: {
-      body: "",
+      body: '',
     },
-    onSubmit: async (values) => {
-      const filteredMessage = leoProfanity.clean(values.body);
+    onSubmit: async values => {
+      const filteredMessage = leoProfanity.clean(values.body)
       const newMessage = {
         body: filteredMessage,
         channelId: currentChannelId,
         username,
-      };
+      }
       try {
         await axios.post(routes.messagesPath(), newMessage, {
           headers: getAuthToken(),
-        });
-        formik.resetForm();
-        inputRef.current.focus();
+        })
+        formik.resetForm()
+        inputRef.current.focus()
       } catch (error) {
-        console.error("Ошибка при отправке сообщения:", error);
-        rollbar.error("Ошибка при отправке сообщения:", error, {
+        console.error('Ошибка при отправке сообщения:', error)
+        rollbar.error('Ошибка при отправке сообщения:', error, {
           endpoint: routes.messagesPath(),
-          method: "POST",
+          method: 'POST',
           timestamp: new Date().toISOString(),
-          component: "MessageForm",
+          component: 'MessageForm',
           action: formik,
-        });
-        if (error.status === "FETCH_ERROR") {
-          toast.error(t("toast.fetchError"));
+        })
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
         }
       }
     },
-  });
+  })
 
   return (
     <form
       onSubmit={formik.handleSubmit}
       noValidate
       className="py-1 border rounded-2"
-      aria-label={t("chat.messageForm.formLabel")}
+      aria-label={t('chat.messageForm.formLabel')}
     >
       <div className="input-group has-validation">
         <input
           id="body"
           name="body"
           type="text"
-          placeholder={t("chat.messageForm.placeholder")}
-          aria-label={t("chat.messageForm.newMessage")}
+          placeholder={t('chat.messageForm.placeholder')}
+          aria-label={t('chat.messageForm.newMessage')}
           className="border-0 p-0 ps-2 form-control"
           onChange={formik.handleChange}
           value={formik.values.body}
@@ -73,7 +73,7 @@ const MessageForm = ({ currentChannelId, username }) => {
           type="submit"
           disabled={!formik.values.body}
           className="btn btn-group-vertical"
-          aria-label={t("chat.messageForm.submit")}
+          aria-label={t('chat.messageForm.submit')}
         >
           <svg
             xmlns="http://www.w3.org/2000/svg"
@@ -89,12 +89,12 @@ const MessageForm = ({ currentChannelId, username }) => {
             />
           </svg>
           <span className="visually-hidden">
-            {t("chat.messageForm.submit")}
+            {t('chat.messageForm.submit')}
           </span>
         </button>
       </div>
     </form>
-  );
-};
+  )
+}
 
-export default MessageForm;
+export default MessageForm

@@ -1,8 +1,8 @@
-import { Button, Dropdown } from "react-bootstrap";
-import { useState } from "react";
-import RemoveChannelModal from "./modal/RemoveChannelModal";
-import RenameChannelModal from "./modal/RenameChannelModal";
-import { useTranslation } from "react-i18next";
+import { Button, Dropdown } from 'react-bootstrap'
+import { useState } from 'react'
+import RemoveChannelModal from './modal/RemoveChannelModal'
+import RenameChannelModal from './modal/RenameChannelModal'
+import { useTranslation } from 'react-i18next'
 
 const Channel = ({
   channel,
@@ -10,17 +10,17 @@ const Channel = ({
   currentChannelId,
   defaultChannelId,
 }) => {
-  const [showRenameModal, setShowRenameModal] = useState(false);
-  const [showRemoveModal, setShowRemoveModal] = useState(false);
-  const isActive = channel.id === currentChannelId;
-  const isRemovable = channel.removable ? true : false;
-  const { t } = useTranslation();
+  const [showRenameModal, setShowRenameModal] = useState(false)
+  const [showRemoveModal, setShowRemoveModal] = useState(false)
+  const isActive = channel.id === currentChannelId
+  const isRemovable = channel.removable ? true : false
+  const { t } = useTranslation()
 
   return (
     <li className="nav-item w-100">
       <div className="d-flex dropdown btn-group">
         <Button
-          variant={isActive ? "secondary" : ""}
+          variant={isActive ? 'secondary' : ''}
           className="w-100 rounded-0 text-start btn"
           onClick={() => handleClick(channel.id)}
           aria-label={`Канал ${channel.name}`}
@@ -34,20 +34,20 @@ const Channel = ({
           <Dropdown>
             <Dropdown.Toggle
               split
-              variant={isActive ? "primary" : ""}
+              variant={isActive ? 'primary' : ''}
               className="flex-grow-0 rounded-0 dropdown-toggle dropdown-toggle-split btn"
             >
               <span className="visually-hidden">
-                {t("chat.channelMenu.dropdownEl")}
+                {t('chat.channelMenu.dropdownEl')}
               </span>
             </Dropdown.Toggle>
 
             <Dropdown.Menu>
               <Dropdown.Item onClick={() => setShowRenameModal(true)}>
-                {t("chat.channelMenu.renameBtn")}
+                {t('chat.channelMenu.renameBtn')}
               </Dropdown.Item>
               <Dropdown.Item onClick={() => setShowRemoveModal(true)}>
-                {t("chat.channelMenu.removeBtn")}
+                {t('chat.channelMenu.removeBtn')}
               </Dropdown.Item>
             </Dropdown.Menu>
           </Dropdown>
@@ -70,7 +70,7 @@ const Channel = ({
         />
       </div>
     </li>
-  );
-};
+  )
+}
 
-export default Channel;
+export default Channel

@@ -1,85 +1,91 @@
-import { useState, useRef, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useFormik } from "formik";
-import axios from "axios";
-import { Button, Form } from "react-bootstrap";
-import { setCredentials } from "../slices/authSlice.js";
-import routes from "../routes.js";
-import avatar from "../assets/avatar-DIE1AEpS.jpg";
-import { useTranslation, Trans } from "react-i18next";
-import { useRollbar } from "@rollbar/react";
-import { toast } from "react-toastify";
-import socket from "../socket.js";
+import { useState, useRef, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useFormik } from 'formik'
+import axios from 'axios'
+import { Button, Form } from 'react-bootstrap'
+import { setCredentials } from '../slices/authSlice.js'
+import routes from '../routes.js'
+import avatar from '../assets/avatar-DIE1AEpS.jpg'
+import { useTranslation, Trans } from 'react-i18next'
+import { useRollbar } from '@rollbar/react'
+import { toast } from 'react-toastify'
+import socket from '../socket.js'
 
 const LoginPage = () => {
-  const { t } = useTranslation();
-  const dispatch = useDispatch();
-  const navigate = useNavigate();
-  const inputRef = useRef();
-  const rollbar = useRollbar();
+  const { t } = useTranslation()
+  const dispatch = useDispatch()
+  const navigate = useNavigate()
+  const inputRef = useRef()
+  const rollbar = useRollbar()
 
   useEffect(() => {
-    inputRef.current.focus();
-  }, []);
-  const [authFailed, setAuthFailed] = useState(false);
+    inputRef.current.focus()
+  }, [])
+  const [authFailed, setAuthFailed] = useState(false)
 
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
+      username: '',
+      password: '',
     },
-    onSubmit: async (values) => {
-      setAuthFailed(false);
+    onSubmit: async values => {
+      setAuthFailed(false)
       try {
-        const response = await axios.post(routes.loginPath(), values);
+        const response = await axios.post(routes.loginPath(), values)
         if (response.status === 200) {
-          console.log(response.data);
-          const { username, token } = response.data;
+          console.log(response.data)
+          const { username, token } = response.data
           dispatch(
             setCredentials({
               username,
               token,
             })
-          );
-          localStorage.setItem("token", token);
-          localStorage.setItem("username", username);
-          socket.connect();
-          navigate("/");
+          )
+          localStorage.setItem('token', token)
+          localStorage.setItem('username', username)
+          socket.connect()
+          navigate('/')
         } else {
-          setAuthFailed(true);
+          setAuthFailed(true)
         }
       } catch (error) {
-        console.error("Ошибка при входе в аккаунт:", error);
-        rollbar.error("Ошибка при входе в аккаунт:", error, {
+        console.error('Ошибка при входе в аккаунт:', error)
+        rollbar.error('Ошибка при входе в аккаунт:', error, {
           endpoint: routes.loginPath(),
-          method: "POST",
+          method: 'POST',
           timestamp: new Date().toISOString(),
           username: values.username,
-          component: "LoginPage",
+          component: 'LoginPage',
           action: formik,
-        });
+        })
         if (error.isAxiosError && error.response.status === 401) {
-          setAuthFailed(true);
-          inputRef.current.select();
-          return;
+          setAuthFailed(true)
+          inputRef.current.select()
+          return
         }
-        if (error.status === "FETCH_ERROR") {
-          toast.error(t("toast.fetchError"));
+        if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
         }
       }
     },
-  });
+  })
 
   return (
     <div className="h-100 bg-light">
       <div className="h-100">
-        <div className="h-100" id="chat">
+        <div
+          className="h-100"
+          id="chat"
+        >
           <div className="d-flex flex-column h-100">
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
-                <Link className="navbar-brand" to="/">
-                  {t("mainHeader.hexletChat")}
+                <Link
+                  className="navbar-brand"
+                  to="/"
+                >
+                  {t('mainHeader.hexletChat')}
                 </Link>
               </div>
             </nav>
@@ -100,14 +106,14 @@ const LoginPage = () => {
                         className="col-12 col-md-6 mt-3 mt-md-0"
                       >
                         <h1 className="text-center mb-4">
-                          {t("loginPage.header")}
+                          {t('loginPage.header')}
                         </h1>
                         <fieldset>
                           <Form.Group className="form-floating mb-3">
                             <Form.Control
                               onChange={formik.handleChange}
                               value={formik.values.username}
-                              placeholder={t("loginPage.username")}
+                              placeholder={t('loginPage.username')}
                               name="username"
                               id="username"
                               autoComplete="username"
@@ -116,7 +122,7 @@ const LoginPage = () => {
                               ref={inputRef}
                             />
                             <Form.Label htmlFor="username">
-                              {t("loginPage.username")}
+                              {t('loginPage.username')}
                             </Form.Label>
                           </Form.Group>
                           <Form.Group className="form-floating mb-4">
@@ -124,7 +130,7 @@ const LoginPage = () => {
                               type="password"
                               onChange={formik.handleChange}
                               value={formik.values.password}
-                              placeholder={t("loginPage.password")}
+                              placeholder={t('loginPage.password')}
                               name="password"
                               id="password"
                               autoComplete="current-password"
@@ -132,10 +138,10 @@ const LoginPage = () => {
                               required
                             />
                             <Form.Label htmlFor="password">
-                              {t("loginPage.password")}
+                              {t('loginPage.password')}
                             </Form.Label>
                             <Form.Control.Feedback type="invalid">
-                              {t("loginPage.invalidPassword")}
+                              {t('loginPage.invalidPassword')}
                             </Form.Control.Feedback>
                           </Form.Group>
                           <Button
@@ -143,7 +149,7 @@ const LoginPage = () => {
                             type="submit"
                             variant="outline-primary"
                           >
-                            {t("loginPage.submit")}
+                            {t('loginPage.submit')}
                           </Button>
                         </fieldset>
                       </Form>
@@ -171,7 +177,7 @@ const LoginPage = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default LoginPage;
+export default LoginPage

@@ -1,99 +1,105 @@
-import { useState, useRef, useEffect } from "react";
-import { useNavigate, Link } from "react-router-dom";
-import { useDispatch } from "react-redux";
-import { useFormik } from "formik";
-import axios from "axios";
-import { Button, Form } from "react-bootstrap";
-import { setCredentials } from "../slices/authSlice.js";
-import routes from "../routes.js";
-import * as Yup from "yup";
-import avatar from "../assets/avatar_1-D7Cot-zE.jpg";
-import { useTranslation } from "react-i18next";
-import { useRollbar } from "@rollbar/react";
-import { toast } from "react-toastify";
+import { useState, useRef, useEffect } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import { useDispatch } from 'react-redux'
+import { useFormik } from 'formik'
+import axios from 'axios'
+import { Button, Form } from 'react-bootstrap'
+import { setCredentials } from '../slices/authSlice.js'
+import routes from '../routes.js'
+import * as Yup from 'yup'
+import avatar from '../assets/avatar_1-D7Cot-zE.jpg'
+import { useTranslation } from 'react-i18next'
+import { useRollbar } from '@rollbar/react'
+import { toast } from 'react-toastify'
 
 const SignUpForm = () => {
-  const { t } = useTranslation();
-  const dispatcher = useDispatch();
-  const navigate = useNavigate();
-  const inputRef = useRef();
-  const rollbar = useRollbar();
+  const { t } = useTranslation()
+  const dispatcher = useDispatch()
+  const navigate = useNavigate()
+  const inputRef = useRef()
+  const rollbar = useRollbar()
 
   useEffect(() => {
-    inputRef.current.focus();
-  }, []);
+    inputRef.current.focus()
+  }, [])
 
-  const [signupFailed, setSignupFailed] = useState(false);
+  const [signupFailed, setSignupFailed] = useState(false)
 
   const validationSchema = Yup.object().shape({
     username: Yup.string()
-      .required(t("signup.feedbacks.required"))
-      .min(3, t("signup.feedbacks.username"))
-      .max(30, t("signup.feedbacks.username")),
+      .required(t('signup.feedbacks.required'))
+      .min(3, t('signup.feedbacks.username'))
+      .max(30, t('signup.feedbacks.username')),
     password: Yup.string()
-      .min(6, t("signup.feedbacks.password"))
-      .required(t("signup.feedbacks.required")),
+      .min(6, t('signup.feedbacks.password'))
+      .required(t('signup.feedbacks.required')),
     confirmPassword: Yup.string()
-      .oneOf([Yup.ref("password"), null], t("signup.feedbacks.confirmPassword"))
-      .required(t("signup.feedbacks.required")),
-  });
+      .oneOf([Yup.ref('password'), null], t('signup.feedbacks.confirmPassword'))
+      .required(t('signup.feedbacks.required')),
+  })
 
   const formik = useFormik({
     initialValues: {
-      username: "",
-      password: "",
-      confirmPassword: "",
+      username: '',
+      password: '',
+      confirmPassword: '',
     },
     validationSchema,
-    onSubmit: async (values) => {
-      setSignupFailed(false);
+    onSubmit: async values => {
+      setSignupFailed(false)
       try {
         const response = await axios.post(routes.newUserPath(), {
           username: values.username,
           password: values.password,
-        });
+        })
 
         if (response.status === 201) {
-          const { username, token } = response.data;
+          const { username, token } = response.data
           dispatcher(
             setCredentials({
               username,
               token,
             })
-          );
-          localStorage.setItem("token", token);
-          localStorage.setItem("username", username);
-          navigate("/");
+          )
+          localStorage.setItem('token', token)
+          localStorage.setItem('username', username)
+          navigate('/')
         }
       } catch (error) {
-        console.error("Ошибка при создании аккаунта:", error);
-        rollbar.error("Ошибка при создании аккаунта:", error, {
+        console.error('Ошибка при создании аккаунта:', error)
+        rollbar.error('Ошибка при создании аккаунта:', error, {
           endpoint: routes.newUserPath(),
-          method: "POST",
+          method: 'POST',
           timestamp: new Date().toISOString(),
           username: values.username,
-          component: "SignUpForm",
+          component: 'SignUpForm',
           action: formik,
-        });
+        })
         if (error.response?.status === 409) {
-          setSignupFailed(true);
-          toast.error(t("signup.feedbacks.uniqueUser"));
-        } else if (error.status === "FETCH_ERROR") {
-          toast.error(t("toast.fetchError"));
+          setSignupFailed(true)
+          toast.error(t('signup.feedbacks.uniqueUser'))
+        } else if (error.status === 'FETCH_ERROR') {
+          toast.error(t('toast.fetchError'))
         }
       }
     },
-  });
+  })
 
   return (
     <div className="h-100 bg-light">
       <div className="h-100">
-        <div className="h-100" id="chat">
+        <div
+          className="h-100"
+          id="chat"
+        >
           <div className="d-flex flex-column h-100">
             <nav className="shadow-sm navbar navbar-expand-lg navbar-light bg-white">
               <div className="container">
-                <Link className="navbar-brand" to="/">
-                  {t("mainHeader.hexletChat")}
+                <Link
+                  className="navbar-brand"
+                  to="/"
+                >
+                  {t('mainHeader.hexletChat')}
                 </Link>
               </div>
             </nav>
@@ -114,11 +120,14 @@ const SignUpForm = () => {
                         className="col-12 col-md-6 mt-3 mt-md-0"
                       >
                         <h1 className="text-center mb-4">
-                          {t("signup.header")}
+                          {t('signup.header')}
                         </h1>
                         {signupFailed && (
-                          <div className="alert alert-danger" role="alert">
-                            {t("signup.feedbacks.uniqueUser")}
+                          <div
+                            className="alert alert-danger"
+                            role="alert"
+                          >
+                            {t('signup.feedbacks.uniqueUser')}
                           </div>
                         )}
                         <fieldset>
@@ -127,7 +136,7 @@ const SignUpForm = () => {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.username}
-                              placeholder={t("signup.feedbacks.username")}
+                              placeholder={t('signup.feedbacks.username')}
                               name="username"
                               id="username"
                               autoComplete="username"
@@ -140,7 +149,7 @@ const SignUpForm = () => {
                               ref={inputRef}
                             />
                             <Form.Label htmlFor="username">
-                              {t("signup.username")}
+                              {t('signup.username')}
                             </Form.Label>
                             <Form.Control.Feedback type="invalid">
                               {formik.errors.username}
@@ -153,7 +162,7 @@ const SignUpForm = () => {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.password}
-                              placeholder={t("signup.feedbacks.password")}
+                              placeholder={t('signup.feedbacks.password')}
                               name="password"
                               id="password"
                               autoComplete="new-password"
@@ -165,7 +174,7 @@ const SignUpForm = () => {
                               required
                             />
                             <Form.Label htmlFor="password">
-                              {t("signup.password")}
+                              {t('signup.password')}
                             </Form.Label>
                             <Form.Control.Feedback type="invalid">
                               {formik.errors.password}
@@ -178,7 +187,7 @@ const SignUpForm = () => {
                               onChange={formik.handleChange}
                               onBlur={formik.handleBlur}
                               value={formik.values.confirmPassword}
-                              placeholder={t("signup.feedbacks.uniqueUser")}
+                              placeholder={t('signup.feedbacks.uniqueUser')}
                               name="confirmPassword"
                               id="confirmPassword"
                               autoComplete="new-password"
@@ -190,7 +199,7 @@ const SignUpForm = () => {
                               required
                             />
                             <Form.Label htmlFor="confirmPassword">
-                              {t("signup.confirmPassword")}
+                              {t('signup.confirmPassword')}
                             </Form.Label>
                             <Form.Control.Feedback type="invalid">
                               {formik.errors.confirmPassword}
@@ -203,7 +212,7 @@ const SignUpForm = () => {
                             variant="outline-primary"
                             disabled={formik.isSubmitting}
                           >
-                            {t("signup.submit")}
+                            {t('signup.submit')}
                           </Button>
                         </fieldset>
                       </Form>
@@ -217,7 +226,7 @@ const SignUpForm = () => {
         </div>
       </div>
     </div>
-  );
-};
+  )
+}
 
-export default SignUpForm;
+export default SignUpForm
