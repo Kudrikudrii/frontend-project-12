@@ -23,12 +23,11 @@ const RemoveChannelModal = ({
       await axios.delete(routes.channelsPath(channelId), {
         headers: getAuthToken(),
       });
-
+      toast.success(t('toast.removedChannel'));
       if (currentChannelId === channelId) {
         handleSwitchChannel(defaultChannelId);
       }
       onClose();
-      toast.success(t('toast.removedChannel'));
     } catch (error) {
       console.error('Ошибка при удалении канала:', error);
       rollbar.error('Ошибка при удалении канала:', error, {
