@@ -5,7 +5,6 @@ import routes from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
-import { useEffect } from 'react';
 
 const RemoveChannelModal = ({
   show,
@@ -23,6 +22,7 @@ const RemoveChannelModal = ({
       await axios.delete(routes.channelsPath(channelId), {
         headers: getAuthToken(),
       });
+      
       toast.success(t('toast.removedChannel'));
       if (currentChannelId === channelId) {
         handleSwitchChannel(defaultChannelId);
