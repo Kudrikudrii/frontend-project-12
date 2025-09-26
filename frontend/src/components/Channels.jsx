@@ -19,7 +19,6 @@ const Channels = ({ currentChannelId, handleClick, defaultChannelId }) => {
     const handleNewChannel = (channel) => {
       try {
         dispatch(addChannel(channel)); // { id: '3', name: 'new name channel', removable: true }
-        handleClick(channel.id);
       } catch (error) {
         rollbar.error('Ошибка при создании канала', error, {
           channelData: channel,
@@ -78,6 +77,7 @@ const Channels = ({ currentChannelId, handleClick, defaultChannelId }) => {
       <AddChannelModal
         show={showModal}
         onClose={() => setShowModal(false)}
+        onChannelCreated={handleClick}
       />
       <ul
         id='channels-box'

@@ -11,7 +11,7 @@ import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
 import { useSelector } from 'react-redux';
 
-const AddChannelModal = ({ show, onClose }) => {
+const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
   const { t } = useTranslation();
   const rollbar = useRollbar();
 
@@ -56,12 +56,16 @@ const AddChannelModal = ({ show, onClose }) => {
         const newChannel = {
           name: filteredChannelName, // Отправляем очищенное имя
         };
-        await axios.post(routes.channelsPath(), newChannel, {
+        const response = await axios.post(routes.channelsPath(), newChannel, {
           headers: getAuthToken(), // { id: '3', name: 'new name channel', removable: true }
         });
         toast.success(t('toast.createdChannel'));
         resetForm();
         onClose();
+
+        if (onChannelCreated && response.data) {
+          onChannelCreated(response.data.id);
+        }
       } catch (error) {
         console.error('Ошибка при создании канала:', error);
         rollbar.error('Ошибка при создании канала:', error, {
