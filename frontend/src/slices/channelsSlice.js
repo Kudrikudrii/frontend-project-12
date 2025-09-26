@@ -1,5 +1,4 @@
 import { createSlice } from '@reduxjs/toolkit';
-import leoProfanity from 'leo-profanity';
 
 const initialState = {
   channels: [], // { id: '1', name: 'general', removable: false}
