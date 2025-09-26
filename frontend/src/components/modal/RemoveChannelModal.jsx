@@ -5,7 +5,7 @@ import routes from '../../routes';
 import { useTranslation } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
-import { useEffect, useRef } from 'react';
+import { useEffect } from 'react';
 
 const RemoveChannelModal = ({
   show,
@@ -17,13 +17,6 @@ const RemoveChannelModal = ({
 }) => {
   const rollbar = useRollbar();
   const { t } = useTranslation();
-  const inputRef = useRef();
-
-  useEffect(() => {
-    if (show) {
-      inputRef.current?.focus();
-    }
-  }, [show]);
 
   const handleRemove = async () => {
     try {
@@ -34,8 +27,8 @@ const RemoveChannelModal = ({
       if (currentChannelId === channelId) {
         handleSwitchChannel(defaultChannelId);
       }
-      toast.success(t('toast.removedChannel'));
       onClose();
+      toast.success(t('toast.removedChannel'));
     } catch (error) {
       console.error('Ошибка при удалении канала:', error);
       rollbar.error('Ошибка при удалении канала:', error, {
