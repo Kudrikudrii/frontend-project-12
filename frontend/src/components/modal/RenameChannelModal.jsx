@@ -9,14 +9,22 @@ import { renameChannel } from '../../slices/channelsSlice';
 import { useTranslation } from 'react-i18next';
 import { useRollbar } from '@rollbar/react';
 import { toast } from 'react-toastify';
+import { useEffect, useRef } from 'react';
 
 const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   const { t } = useTranslation();
   const dispatch = useDispatch();
   const rollbar = useRollbar();
+  const inputRef = useRef();
 
   const channels = useSelector((state) => state.channels.channels);
   const existingChannelNames = channels.map((channel) => channel.name.toLowerCase());
+
+  useEffect(() => {
+    if (show) {
+      inputRef.current?.focus();
+    }
+  }, [show]);
 
   const formik = useFormik({
     initialValues: {
