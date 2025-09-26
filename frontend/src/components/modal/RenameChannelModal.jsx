@@ -18,7 +18,9 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   const inputRef = useRef();
 
   const channels = useSelector((state) => state.channels.channels);
-  const existingChannelNames = channels.map((channel) => channel.name.toLowerCase());
+  const existingChannelNames = channels.map((channel) =>
+    channel.name.toLowerCase()
+  );
 
   useEffect(() => {
     if (show) {
@@ -35,11 +37,18 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
         .required(t('modal.error.required'))
         .min(3, t('modal.error.length'))
         .max(30, t('modal.error.length'))
-        .test(t('modal.error.notOneOf'), (value) => !existingChannelNames.includes(value.toLowerCase())),
+        .test(
+          t('modal.error.notOneOf'),
+          (value) => !existingChannelNames.includes(value.toLowerCase())
+        ),
     }),
     onSubmit: async (values) => {
       try {
-        await axios.patch(routes.channelsPath(channelId), { name: values.name }, { headers: getAuthToken() });
+        await axios.patch(
+          routes.channelsPath(channelId),
+          { name: values.name },
+          { headers: getAuthToken() }
+        );
         dispatch(renameChannel({ id: channelId, name: values.name }));
         toast.success(t('toast.renamedChannel'));
         onClose();
@@ -73,6 +82,9 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
       <Modal.Body>
         <Form onSubmit={formik.handleSubmit}>
           <Form.Group>
+            <Form.Label>
+              {t('modal.renameChannel.label')}
+            </Form.Label>
             <Form.Control
               type='text'
               name='name'
@@ -82,7 +94,9 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
               onBlur={formik.handleBlur}
               isInvalid={formik.touched.name && !!formik.errors.name}
             />
-            <Form.Control.Feedback type='invalid'>{formik.errors.name}</Form.Control.Feedback>
+            <Form.Control.Feedback type='invalid'>
+              {formik.errors.name}
+            </Form.Control.Feedback>
           </Form.Group>
           <div className='d-flex justify-content-end mt-3'>
             <Button
@@ -94,7 +108,9 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
             <Button
               variant='primary'
               type='submit'
-              disabled={!formik.dirty || !formik.isValid || formik.isSubmitting}>
+              disabled={
+                !formik.dirty || !formik.isValid || formik.isSubmitting
+              }>
               {t('modal.confirmBtn')}
             </Button>
           </div>
