@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { useNavigate } from 'react-router-dom';
 import { setChannels } from '../slices/channelsSlice.js';
@@ -22,6 +22,10 @@ const ChannelsPage = () => {
     (state) =>
       state.channels.channels.find((c) => c.name === 'general')?.id || '1'
   );
+
+  const handleChannelClick = useCallback((channelId) => {
+    setCurrentChannelId(channelId);
+  }, []);
 
   useEffect(() => {
     const fetchContent = async () => {
@@ -116,7 +120,7 @@ const ChannelsPage = () => {
               <div className='row h-100 bg-white flex-md-row'>
                 <Channels
                   currentChannelId={currentChannelId}
-                  handleClick={setCurrentChannelId}
+                  handleClick={handleChannelClick}
                   defaultChannelId={defaultChannelId}
                 />
                 <Messages currentChannelId={currentChannelId} />
