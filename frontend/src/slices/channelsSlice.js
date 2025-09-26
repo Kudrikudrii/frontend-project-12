@@ -13,11 +13,7 @@ const slice = createSlice({
       state.channels = payload;
     },
     addChannel: (state, { payload }) => {
-      const filteredChannel = {
-        ...payload,
-        name: leoProfanity.clean(payload.name),
-      };
-      state.channels.push(filteredChannel); // { id: '3', name: 'new name channel', removable: true }
+      state.channels.push(payload); // { id: '3', name: 'new name channel', removable: true }
     },
     renameChannel: (state, { payload }) => {
       const channel = state.channels.find((c) => c.id === payload.id);
