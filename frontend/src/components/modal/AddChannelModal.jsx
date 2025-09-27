@@ -22,8 +22,8 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
     channel.name.toLowerCase(),
   )
 
-  // const englishBadWords = ['boobs'] 
-  // leoProfanity.add(englishBadWords)
+  const englishBadWords = ['boobs'] // по другому не работает
+  leoProfanity.add(englishBadWords)
 
   useEffect(() => {
     if (show) {
@@ -49,10 +49,10 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
       try {
         const filteredChannelName = leoProfanity.clean(values.name)
         const newChannel = {
-          name: filteredChannelName, // Отправляем очищенное имя
+          name: filteredChannelName,
         }
         const response = await axios.post(routes.channelsPath(), newChannel, {
-          headers: getAuthToken(), // { id: '3', name: 'new name channel', removable: true }
+          headers: getAuthToken(),
         })
         toast.success(t('toast.createdChannel'))
         resetForm()
@@ -63,7 +63,6 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
         }
       }
       catch (error) {
-        console.error('Ошибка при создании канала:', error)
         rollbar.error('Ошибка при создании канала:', error, {
           endpoint: routes.channelsPath(),
           method: 'POST',

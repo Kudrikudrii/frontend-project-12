@@ -52,7 +52,6 @@ const LoginPage = () => {
         }
       }
       catch (error) {
-        console.error('Ошибка при входе в аккаунт:', error)
         rollbar.error('Ошибка при входе в аккаунт:', error, {
           endpoint: routes.loginPath(),
           method: 'POST',

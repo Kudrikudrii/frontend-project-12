@@ -67,7 +67,6 @@ const SignUpForm = () => {
         }
       }
       catch (error) {
-        console.error('Ошибка при создании аккаунта:', error)
         rollbar.error('Ошибка при создании аккаунта:', error, {
           endpoint: routes.newUserPath(),
           method: 'POST',

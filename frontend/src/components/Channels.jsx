@@ -18,7 +18,7 @@ const Channels = ({ currentChannelId, handleClick, defaultChannelId }) => {
   useEffect(() => {
     const handleNewChannel = (channel) => {
       try {
-        dispatch(addChannel(channel)) // { id: '3', name: 'new name channel', removable: true }
+        dispatch(addChannel(channel))
       }
       catch (error) {
         rollbar.error('Ошибка при создании канала', error, {

@@ -92,6 +92,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
               onChange={formik.handleChange}
               onBlur={formik.handleBlur}
               isInvalid={formik.touched.name && !!formik.errors.name}
+              ref={inputRef}
             />
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}
