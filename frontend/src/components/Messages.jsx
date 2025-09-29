@@ -18,10 +18,14 @@ const Messages = ({ currentChannelId }) => {
   const messagesEndRef = useRef(null)
 
   const scrollToBottom = () => {
-    messagesEndRef.current?.scrollIntoView({ 
-      behavior: 'smooth',
-      block: 'end'
-    })
+    try {
+      messagesEndRef.current?.scrollIntoView({ 
+        behavior: 'smooth',
+        block: 'end'
+      })
+    }
+    catch (error) {
+      console.error('Scroll error:', error);
   }
 
   useEffect(() => {
