@@ -86,6 +86,7 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
         <Form
           onSubmit={formik.handleSubmit}
           noValidate
+          autoComplete="off"
         >
           <Form.Group
             controlId="name"
@@ -103,6 +104,7 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
               value={formik.values.name}
               isInvalid={formik.touched.name && !!formik.errors.name}
               ref={inputRef}
+              autoComplete="off"
             />
             {formik.touched.name && formik.errors.name && (
               <Form.Control.Feedback type="invalid">

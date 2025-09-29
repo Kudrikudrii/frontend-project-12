@@ -36,7 +36,6 @@ const MessageForm = ({ currentChannelId, username }) => {
         inputRef.current.focus()
       }
       catch (error) {
-        console.error('Ошибка при отправке сообщения:', error)
         rollbar.error('Ошибка при отправке сообщения:', error, {
           endpoint: routes.messagesPath(),
           method: 'POST',
@@ -57,6 +56,7 @@ const MessageForm = ({ currentChannelId, username }) => {
       noValidate
       className="py-1 border rounded-2"
       aria-label={t('chat.messageForm.formLabel')}
+      autoComplete="off"
     >
       <div className="input-group has-validation">
         <input
@@ -69,6 +69,7 @@ const MessageForm = ({ currentChannelId, username }) => {
           onChange={formik.handleChange}
           value={formik.values.body}
           ref={inputRef}
+          autoComplete="off"
         />
         <button
           type="submit"

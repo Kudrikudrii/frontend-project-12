@@ -107,6 +107,7 @@ const LoginPage = () => {
                       <Form
                         onSubmit={formik.handleSubmit}
                         className="col-12 col-md-6 mt-3 mt-md-0"
+                        autoComplete="off"
                       >
                         <h1 className="text-center mb-4">
                           {t('loginPage.header')}

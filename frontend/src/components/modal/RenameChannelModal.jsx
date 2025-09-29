@@ -72,7 +72,10 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
         <Modal.Title>{t('modal.renameChannel.title')}</Modal.Title>
       </Modal.Header>
       <Modal.Body>
-        <Form onSubmit={formik.handleSubmit}>
+        <Form
+          onSubmit={formik.handleSubmit}
+          autoComplete="off"
+        >
           <Form.Group>
             <Form.Control
               type="text"
@@ -83,6 +86,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
               onBlur={formik.handleBlur}
               isInvalid={formik.touched.name && !!formik.errors.name}
               ref={inputRef}
+              autoComplete="off"
             />
             <Form.Control.Feedback type="invalid">
               {formik.errors.name}
