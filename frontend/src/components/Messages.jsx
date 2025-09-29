@@ -26,6 +26,7 @@ const Messages = ({ currentChannelId }) => {
     }
     catch (error) {
       console.error('Scroll error:', error);
+    }
   }
 
   useEffect(() => {
