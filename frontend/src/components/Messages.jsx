@@ -1,5 +1,5 @@
 import { useSelector, useDispatch } from 'react-redux'
-import { useEffect } from 'react'
+import { useEffect, useRef } from 'react'
 import Message from './Message'
 import MessageForm from './MessageForm'
 import ActiveChannel from './ActiveChannel.jsx'
@@ -15,6 +15,18 @@ const Messages = ({ currentChannelId }) => {
   const channels = useSelector(state => state.channels.channels)
   const username = useSelector(state => state.auth.username)
   const rollbar = useRollbar()
+  const messagesEndRef = useRef(null)
+
+  const scrollToBottom = () => {
+    messagesEndRef.current?.scrollIntoView({ 
+      behavior: 'smooth',
+      block: 'end'
+    })
+  }
+
+  useEffect(() => {
+    scrollToBottom()
+  }, [messages, currentChannelId])
 
   useEffect(() => {
     const handleNewMessage = (message) => {
@@ -96,11 +108,13 @@ const Messages = ({ currentChannelId }) => {
               key={message.id}
             />
           ))}
+          <div ref={messagesEndRef} />
         </div>
         <div className="mt-auto px-5 py-3">
           <MessageForm
             currentChannelId={currentChannelId}
             username={username}
+            onMessageSent={scrollToBottom}
           />
         </div>
       </div>

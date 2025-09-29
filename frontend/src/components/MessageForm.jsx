@@ -8,7 +8,7 @@ import leoProfanity from 'leo-profanity'
 import { useRollbar } from '@rollbar/react'
 import { toast } from 'react-toastify'
 
-const MessageForm = ({ currentChannelId, username }) => {
+const MessageForm = ({ currentChannelId, username, onMessageSent }) => {
   const { t } = useTranslation()
   const rollbar = useRollbar()
 
@@ -34,6 +34,9 @@ const MessageForm = ({ currentChannelId, username }) => {
         })
         formik.resetForm()
         inputRef.current.focus()
+        if (onMessageSent) {
+          onMessageSent();
+        }
       }
       catch (error) {
         rollbar.error('Ошибка при отправке сообщения:', error, {
