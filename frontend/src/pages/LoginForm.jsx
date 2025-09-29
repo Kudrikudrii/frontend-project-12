@@ -11,6 +11,7 @@ import { useTranslation, Trans } from 'react-i18next'
 import { useRollbar } from '@rollbar/react'
 import { toast } from 'react-toastify'
 import socket from '../socket.js'
+import createSchemas from '../validation/index.js'
 
 const LoginPage = () => {
   const { t } = useTranslation()
@@ -29,6 +30,7 @@ const LoginPage = () => {
       username: '',
       password: '',
     },
+    validationSchema: createSchemas(t).login,
     onSubmit: async (values) => {
       setAuthFailed(false)
       try {

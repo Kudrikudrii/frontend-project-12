@@ -3,13 +3,13 @@ import axios from 'axios'
 import { Modal, Button, Form } from 'react-bootstrap'
 import getAuthToken from '../../getAuthToken'
 import routes from '../../routes'
-import * as Yup from 'yup'
 import { useDispatch, useSelector } from 'react-redux'
 import { renameChannel } from '../../slices/channelsSlice'
 import { useTranslation } from 'react-i18next'
 import { useRollbar } from '@rollbar/react'
 import { toast } from 'react-toastify'
 import { useEffect, useRef } from 'react'
+import createSchemas from '../../validation/index.js'
 
 const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
   const { t } = useTranslation()
@@ -32,16 +32,7 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
     initialValues: {
       name: currentName,
     },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .required(t('modal.error.required'))
-        .min(3, t('modal.error.length'))
-        .max(30, t('modal.error.length'))
-        .test(
-          t('modal.error.notOneOf'),
-          value => !existingChannelNames.includes(value.toLowerCase()),
-        ),
-    }),
+    validationSchema: createSchemas(t, existingChannelNames).modal,
     onSubmit: async (values) => {
       try {
         await axios.patch(
@@ -54,7 +45,6 @@ const RenameChannelModal = ({ show, onClose, channelId, currentName }) => {
         onClose()
       }
       catch (error) {
-        console.error('Ошибка при переименовании канала:', error)
         rollbar.error('Ошибка при переименовании канала:', error, {
           endpoint: routes.channelsPath(channelId),
           method: 'PATCH',

@@ -4,12 +4,12 @@ import { useEffect, useRef } from 'react'
 import { Modal, Button, Form } from 'react-bootstrap'
 import getAuthToken from '../../getAuthToken'
 import routes from '../../routes'
-import * as Yup from 'yup'
 import { useTranslation } from 'react-i18next'
 import leoProfanity from 'leo-profanity'
 import { useRollbar } from '@rollbar/react'
 import { toast } from 'react-toastify'
 import { useSelector } from 'react-redux'
+import createSchemas from '../../validation/index.js'
 
 const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
   const { t } = useTranslation()
@@ -35,16 +35,7 @@ const AddChannelModal = ({ show, onClose, onChannelCreated }) => {
     initialValues: {
       name: '',
     },
-    validationSchema: Yup.object({
-      name: Yup.string()
-        .required(t('modal.error.required'))
-        .min(3, t('modal.error.length'))
-        .max(20, t('modal.error.length'))
-        .test(
-          t('modal.error.notOneOf'),
-          value => !existingChannelNames.includes(value.toLowerCase()),
-        ),
-    }),
+    validationSchema: createSchemas(t, existingChannelNames).modal,
     onSubmit: async (values, { setSubmitting, resetForm }) => {
       try {
         const filteredChannelName = leoProfanity.clean(values.name)

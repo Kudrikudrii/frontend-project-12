@@ -6,11 +6,11 @@ import axios from 'axios'
 import { Button, Form } from 'react-bootstrap'
 import { setCredentials } from '../slices/authSlice.js'
 import routes from '../routes.js'
-import * as Yup from 'yup'
 import avatar from '../assets/avatar_1-D7Cot-zE.jpg'
 import { useTranslation } from 'react-i18next'
 import { useRollbar } from '@rollbar/react'
 import { toast } from 'react-toastify'
+import createSchemas from '../validation/index.js'
 
 const SignUpForm = () => {
   const { t } = useTranslation()
@@ -25,26 +25,13 @@ const SignUpForm = () => {
 
   const [signupFailed, setSignupFailed] = useState(false)
 
-  const validationSchema = Yup.object().shape({
-    username: Yup.string()
-      .required(t('signup.feedbacks.required'))
-      .min(3, t('signup.feedbacks.username'))
-      .max(30, t('signup.feedbacks.username')),
-    password: Yup.string()
-      .min(6, t('signup.feedbacks.password'))
-      .required(t('signup.feedbacks.required')),
-    confirmPassword: Yup.string()
-      .oneOf([Yup.ref('password'), null], t('signup.feedbacks.confirmPassword'))
-      .required(t('signup.feedbacks.required')),
-  })
-
   const formik = useFormik({
     initialValues: {
       username: '',
       password: '',
       confirmPassword: '',
     },
-    validationSchema,
+    validationSchema: createSchemas(t).signup,
     onSubmit: async (values) => {
       setSignupFailed(false)
       try {
