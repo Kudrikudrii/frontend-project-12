@@ -9,7 +9,7 @@ const ModalSchema = (t, existingChannelNames = []) => {
       .test(
         'unique-name',
         (t('modal.error.notOneOf'),
-        (value) => !existingChannelNames.includes(value.toLowerCase())),
+        value => !existingChannelNames.includes(value.toLowerCase())),
       ),
   })
 }

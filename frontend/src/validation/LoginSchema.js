@@ -1,6 +1,6 @@
 import * as Yup from 'yup'
 
-const LoginSchema = (t) => Yup.object().shape({
+const LoginSchema = t => Yup.object().shape({
   username: Yup.string()
     .trim()
     .min(3, t('signup.feedbacks.username'))

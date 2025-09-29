@@ -35,7 +35,7 @@ const MessageForm = ({ currentChannelId, username, onMessageSent }) => {
         formik.resetForm()
         inputRef.current.focus()
         if (onMessageSent) {
-          onMessageSent();
+          onMessageSent()
         }
       }
       catch (error) {

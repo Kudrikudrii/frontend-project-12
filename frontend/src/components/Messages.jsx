@@ -19,13 +19,13 @@ const Messages = ({ currentChannelId }) => {
 
   const scrollToBottom = () => {
     try {
-      messagesEndRef.current?.scrollIntoView({ 
+      messagesEndRef.current?.scrollIntoView({
         behavior: 'smooth',
-        block: 'end'
+        block: 'end',
       })
     }
     catch (error) {
-      console.error('Scroll error:', error);
+      console.error('Scroll error:', error)
     }
   }
 
